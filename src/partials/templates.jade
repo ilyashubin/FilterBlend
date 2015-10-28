@@ -1,0 +1,68 @@
+mixin templates()
+  .templates
+    //- filters
+    template#filters
+      .sec__heading
+        .sec__label filters
+        .sec__btn(v-on='click: reset') reset
+      .sec__inner
+        .filters
+          div(v-repeat='filters')
+            label.filters__item(v-class='is-active: enabled')
+              .check
+                input(type='checkbox' v-model='enabled')
+                span.check__display
+              span.filters__label
+                span.filters__property {{name}}
+                span.filters__value(
+                  v-on='mousedown: drag(this, $event)'
+                ) {{value.current}}{{value.measure}}
+    //- blends
+    template#blend
+      .sec__heading
+        .sec__label blend-mode
+        .sec__btn(v-on='click: reset') reset
+      .sec__inner
+        .blend
+          .blend__item(
+            v-repeat='values'
+            v-on='click: current = $value'
+            v-class='is-active: current == $value'
+          ) {{$value}}
+    //- sources
+    template#sources
+      .source.sec
+        .source__inner
+          .source__item(
+            v-repeat='items'
+            v-class='is-selected: current == $index, is-hidden: hidden'
+          )
+            .source__cell
+              .source__selected(v-on='click: switchSelected($index)')
+            .source__cell
+              label.part.-url 
+                input.source__input(
+                  type='text'
+                  v-model='url'
+                  v-on='keyup: getBackgroundSize(this)'
+                )
+            .source__cell
+              span.part.-repeat(
+                v-on='click: repeatClick(this)'
+              ) {{repeat}}
+              
+            .source__cell
+              span.part.-position(
+                v-on='click: positionClick(this), mousedown: positionDrag($event, this)'
+              )
+                span {{isCenter ? 'center' : x}}{{isCenter ? '' : 'px'}}
+                span {{isCenter ? 'center' : y}}{{isCenter ? '' : 'px'}}
+            .source__cell
+              span.part.-size(
+                v-on='click: sizeClick(this), mousedown: sizeDrag(this, $event)'
+              ) {{size == 'auto' ? 'auto' : size + '%'}}
+            .source__cell.-hide
+              span.part.-hide(
+                v-on='click: hide($index)'
+                v-show='items.length > 1'
+              ) hide

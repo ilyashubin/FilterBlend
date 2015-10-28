@@ -1,0 +1,55 @@
+include ../partials/*.jade
+
+mixin scripts()
+  <!-- build:js js/app.concat.js -->
+  
+  //- Bower js components
+  <!-- bower:js -->
+  <!-- endbower -->
+
+  //- Scripts
+  script(src="js/app.js")
+    
+  <!-- endbuild -->
+  
+mixin styles()
+  <!-- build:css css/main.concat.css -->
+  
+  //- Bower css components
+  <!-- bower:css -->
+  <!-- endbower -->
+
+  //- Styles
+  link(rel="stylesheet", href="css/main.css")
+    
+  <!-- endbuild -->
+
+
+
+doctype html
+html
+  head
+    block title
+      title Filter Blend - CSS blend modes and filters playground
+
+    meta(charset='utf-8')
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      
+    +styles
+
+  body
+    +templates
+    .drag-overlay
+    .container
+      .container__header
+        +header
+      .container__app
+        .container__main
+          .container__main-inner
+            +source
+            +preview
+        .container__options
+          +options
+          
+    +scripts

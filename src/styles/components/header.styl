@@ -1,0 +1,36 @@
+.header
+  padding 15px 0
+  color #f9f9f9
+  &__inner
+    position relative
+  &__logo
+    float left
+    width 50px
+    height 50px
+    background linear-gradient(50deg, #6affb8, #5ef056)
+    margin-right 10px
+    margin-top 10px
+    position relative
+    border-radius 50%
+    vertical-align -13px
+    filter grayscale(30%)
+    &:before
+      content ''
+      position absolute
+      top -15px
+      left -17px
+      width 70px
+      height 70px
+      background url('../img/logo.svg') no-repeat center
+      mix-blend-mode darken
+  h1
+    font-family 'Helvetica Neue'
+    font-size 39px
+    text-transform uppercase
+    position relative
+    font-weight 400
+    margin 0
+    color #fff
+  h3
+    margin 8px 0 0
+    color darken(#c4c8d4, 30%)

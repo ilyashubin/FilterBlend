@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Filter Blend - CSS blend modes and filters playground</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- build:css css/main.concat.css --><!-- bower:css -->
+<!-- endbower -->
+    <link rel="stylesheet" href="css/main.css"/><!-- endbuild -->
+  </head>
+  <body>
+    <div class="templates">
+      <template id="filters">
+        <div class="sec__heading">
+          <div class="sec__label">filters</div>
+          <div v-on="click: reset" class="sec__btn">reset</div>
+        </div>
+        <div class="sec__inner">
+          <div class="filters">
+            <div v-repeat="filters">
+              <label v-class="is-active: enabled" class="filters__item">
+                <div class="check">
+                  <input type="checkbox" v-model="enabled"/><span class="check__display"></span>
+                </div><span class="filters__label"><span class="filters__property">{{name}}</span><span v-on="mousedown: drag(this, $event)" class="filters__value">{{value.current}}{{value.measure}}</span></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template id="blend">
+        <div class="sec__heading">
+          <div class="sec__label">blend-mode</div>
+          <div v-on="click: reset" class="sec__btn">reset</div>
+        </div>
+        <div class="sec__inner">
+          <div class="blend">
+            <div v-repeat="values" v-on="click: current = $value" v-class="is-active: current == $value" class="blend__item">{{$value}}</div>
+          </div>
+        </div>
+      </template>
+      <template id="sources">
+        <div class="source sec">
+          <div class="source__inner">
+            <div v-repeat="items" v-class="is-selected: current == $index, is-hidden: hidden" class="source__item">
+              <div class="source__cell">
+                <div v-on="click: switchSelected($index)" class="source__selected"></div>
+              </div>
+              <div class="source__cell">
+                <label class="part -url"> 
+                  <input type="text" v-model="url" v-on="keyup: getBackgroundSize(this)" class="source__input"/>
+                </label>
+              </div>
+              <div class="source__cell"><span v-on="click: repeatClick(this)" class="part -repeat">{{repeat}}</span></div>
+              <div class="source__cell"><span v-on="click: positionClick(this), mousedown: positionDrag($event, this)" class="part -position"><span>{{isCenter ? 'center' : x}}{{isCenter ? '' : 'px'}}</span><span>{{isCenter ? 'center' : y}}{{isCenter ? '' : 'px'}}</span></span></div>
+              <div class="source__cell"><span v-on="click: sizeClick(this), mousedown: sizeDrag(this, $event)" class="part -size">{{size == 'auto' ? 'auto' : size + '%'}}</span></div>
+              <div class="source__cell -hide"><span v-on="click: hide($index)" v-show="items.length &gt; 1" class="part -hide">hide</span></div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div class="drag-overlay"></div>
+    <div class="container">
+      <div class="container__header">
+        <div class="header">
+          <div class="header__inner">
+            <div class="header__logo"></div>
+            <h1>Filter Blend</h1>
+            <h3>CSS blend modes and filters playground</h3>
+          </div>
+        </div>
+      </div>
+      <div class="container__app">
+        <div class="container__main">
+          <div class="container__main-inner">
+            <filterblend-sources v-ref="sources" str="{{@ backgroundStr}}"></filterblend-sources>
+            <div class="preview">
+              <div style="background-color: {{background.values[background.currentIndex]}}" class="preview__inner sec">
+                <div class="preview__colors">
+                  <div v-repeat="background.values" v-on="click: background.currentIndex = $index" style="background-color: {{background.values[$index]}}" class="preview__colors-item"></div>
+                </div>
+                <div style="{{previewStyle}}" v-on="mousedown: $.sources.positionDrag, click: $.sources.switchSelected" class="preview__screen"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container__options">
+          <div class="options">
+            <div class="options__inner">
+              <div class="options__section sec -blend">
+                <filterblend-blend v-ref="blend" str="{{@ blendStr}}"></filterblend-blend>
+              </div>
+              <div class="options__section sec -filters">
+                <filterblend-filters v-ref="filters" str="{{@ filtersStr}}"></filterblend-filters>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- build:js js/app.concat.js --><!-- bower:js -->
+<script src="components/jquery/dist/jquery.min.js"></script>
+<script src="components/vue/dist/vue.min.js"></script>
+<!-- endbower -->
+    <script src="js/app.js"></script><!-- endbuild -->
+  </body>
+</html>

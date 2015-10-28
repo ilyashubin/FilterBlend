@@ -1,0 +1,62 @@
+.source
+  color lighten($text-sub, 60%)
+  font-size .95em
+  margin-bottom 10px
+  &__inner
+    padding 10px 15px
+  &__item
+    display flex
+    align-items center
+    &:hover
+      color lighten($text-sub, 40%)
+    &.is-hidden
+      .part:not(.-hide)
+      .source__selected
+      input
+        pointer-events none
+        color #eee !important
+      .part.-hide
+        background-color orange
+        color #fff
+
+  &__cell
+    &.-hide
+      flex 1
+      text-align right
+
+  &__selected
+    display inline-block
+    width 14px
+    height 14px
+    vertical-align middle
+    margin-right 5px
+    border-radius 100%
+    background #eee
+    transition background .2s
+    cursor pointer
+    .is-selected &
+      background $base-sub
+  &__input
+    color $text-sub
+  .part
+    display inline-block
+    padding .36em .6em
+    margin 0 .1em
+    cursor pointer
+    border-radius .28em
+    transition background .2s, color .2s
+    &:hover
+      background $base-sub
+      color #fff
+    &.-url
+      &:hover
+        background transparent
+        color inherit
+      input
+        margin 0 .2em
+    &.-position
+      cursor move
+      span:first-child
+        margin-right 5px
+    &.-size
+      cursor ns-resize

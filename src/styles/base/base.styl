@@ -1,0 +1,83 @@
+*
+  box-sizing border-box
+
+html
+  background #bfcede url('../img/pattern.svg')
+  background-size 170px
+  color $text-main
+  font 14px/1.4 'Helvetica', Arial, sans-serif
+
+a
+  text-decoration none
+  transition color .15s, background-color .15s, opacity .15s
+  color #ff5256
+  &:hover
+    text-decoration none
+    color #d55154
+
+::selection
+  color #fff
+  background $base-sub
+
+// form elements
+button
+input[type='button']
+input[type='submit']
+  cursor pointer
+
+textarea
+input[type='text']
+input[type='password']
+input[type='email']
+input[type='search']
+  background transparent
+  box inline-block
+  border none
+  transition background .2s, color .2s
+  vertical-align middle
+  border 1px solid #eee
+  padding .45em .8em
+  border-radius .28em
+  &:focus
+    border-color $base-sub
+
+textarea
+  resize vertical
+
+input
+textarea
+button
+  &:focus
+    outline none
+
+img
+  height auto
+  max-width 100%
+
+ul
+  list-style none
+  margin 0
+  padding 0
+
+h1
+h2
+h3
+h4
+h5
+h6
+  line-height 1.1
+
+h1
+h2
+h3
+  margin-top 20px
+  margin-bottom 10px
+
+h4
+h5
+h6
+  margin-top 10px
+  margin-bottom 10px
+
+p
+  margin 0 0 10px

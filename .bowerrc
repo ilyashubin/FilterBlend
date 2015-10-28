@@ -1,0 +1,5 @@
+{
+  "directory": "dist/components/",
+  "analytics": false,
+  "timeout": 120000
+}

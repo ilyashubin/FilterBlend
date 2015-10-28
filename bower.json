@@ -1,0 +1,30 @@
+{
+  "name": "bower deps",
+  "version": "0.1.0",
+  "authors": [
+    "Shubin Ilya <pixelwake@gmail.com>"
+  ],
+  "description": "project dependencies",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "dist/components/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.*",
+    "vue": "~0.12.14"
+  },
+  "overrides": {
+    "jquery": {
+      "main": "dist/jquery.min.js"
+    },
+    "vue": {
+      "main": "dist/vue.min.js"
+    }
+  }
+}
