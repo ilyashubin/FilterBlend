@@ -173,6 +173,26 @@ export default Vue.extend({
     },
 
     /**
+     * Handle local image uploading
+     */
+    readURL(e) {
+      let item = e.targetVM;
+      let input = e.target;
+      let self = this;
+
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          item.url = e.target.result;
+          self.getBackgroundSize(item);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    },
+
+    /**
      * Calculate background styles for main VM
      */
     compileStyle() {

@@ -44,12 +44,15 @@ mixin templates()
                 title='switch active background'
               )
             .source__cell
-              label.part.-url 
-                input.source__input(
+              label.source__input
+                input(
                   type='text'
                   v-model='url'
                   v-on='keyup: getBackgroundSize(this)'
                 )
+              label.source__upload
+                i.fa.fa-file-image-o
+                input(type='file' v-on='change: readURL').source__upload
             .source__cell
               span.part.-repeat(
                 v-on='click: repeatClick(this)'

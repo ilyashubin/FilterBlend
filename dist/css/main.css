@@ -581,6 +581,8 @@ p {
 }
 .source__item.is-hidden .part:not(.-hide),
 .source__item.is-hidden .source__selected,
+.source__item.is-hidden .source__input,
+.source__item.is-hidden .source__upload,
 .source__item.is-hidden input {
   pointer-events: none;
   color: #eee !important;
@@ -603,7 +605,7 @@ p {
   width: 14px;
   height: 14px;
   vertical-align: middle;
-  margin-right: 5px;
+  margin-right: 10px;
   border-radius: 100%;
   background: #eee;
   -webkit-transition: background 0.2s;
@@ -614,7 +616,33 @@ p {
   background: #58cb6b;
 }
 .source__input {
+  display: inline-block;
+  padding: 0.36em 0;
+  margin: 0 0.2em 0 0.1em;
+}
+.source__input input {
   color: #73738e;
+}
+.source__upload {
+  margin-right: 3px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  line-height: 18px;
+  font-size: 1.1em;
+  text-align: center;
+  cursor: pointer;
+  vertical-align: middle;
+  -webkit-transition: 0.2s;
+          transition: 0.2s;
+}
+.source__upload:hover {
+  color: #58cb6b;
+}
+.source__upload input {
+  opacity: 0;
+  visibility: hidden;
 }
 .source .part {
   display: inline-block;

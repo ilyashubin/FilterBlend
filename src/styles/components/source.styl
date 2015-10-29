@@ -12,6 +12,8 @@
     &.is-hidden
       .part:not(.-hide)
       .source__selected
+      .source__input
+      .source__upload
       input
         pointer-events none
         color #eee !important
@@ -31,7 +33,7 @@
     width 14px
     height 14px
     vertical-align middle
-    margin-right 5px
+    margin-right 10px
     border-radius 100%
     background #eee
     transition background .2s
@@ -39,7 +41,28 @@
     .is-selected &
       background $base-sub
   &__input
-    color $text-sub
+    display inline-block
+    padding .36em 0
+    margin 0 .2em 0 .1em
+    input
+      color $text-sub
+  &__upload
+    margin-right 3px
+    display inline-block
+    width 20px
+    height 20px
+    overflow hidden
+    line-height 18px
+    font-size 1.1em
+    text-align center
+    cursor pointer
+    vertical-align middle
+    transition .2s
+    &:hover
+      color $base-sub
+    input
+      opacity 0
+      visibility hidden
   .part
     display inline-block
     padding .36em .6em

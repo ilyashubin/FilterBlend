@@ -48,8 +48,11 @@
                 <div v-on="click: switchSelected($index)" title="switch active background" class="source__selected"></div>
               </div>
               <div class="source__cell">
-                <label class="part -url"> 
-                  <input type="text" v-model="url" v-on="keyup: getBackgroundSize(this)" class="source__input"/>
+                <label class="source__input">
+                  <input type="text" v-model="url" v-on="keyup: getBackgroundSize(this)"/>
+                </label>
+                <label class="source__upload"><i class="fa fa-file-image-o"></i>
+                  <input type="file" v-on="change: readURL" class="source__upload"/>
                 </label>
               </div>
               <div class="source__cell"><span v-on="click: repeatClick(this)" title="Background repeat" class="part -repeat">{{repeat}}</span></div>

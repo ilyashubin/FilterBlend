@@ -41,7 +41,6 @@ let main = new Vue({
   ready: initEvents,
 });
 
-
 function initEvents() {
   let $win = $(window);
   $('input').on('focus', function() {
