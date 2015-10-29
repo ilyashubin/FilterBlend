@@ -16,6 +16,7 @@ mixin templates()
                 span.filters__property {{name}}
                 span.filters__value(
                   v-on='mousedown: drag(this, $event)'
+                  title='drag up or down to change'
                 ) {{value.current}}{{value.measure}}
     //- blends
     template#blend
@@ -38,7 +39,10 @@ mixin templates()
             v-class='is-selected: current == $index, is-hidden: hidden'
           )
             .source__cell
-              .source__selected(v-on='click: switchSelected($index)')
+              .source__selected(
+                v-on='click: switchSelected($index)'
+                title='switch active background'
+              )
             .source__cell
               label.part.-url 
                 input.source__input(
@@ -49,20 +53,24 @@ mixin templates()
             .source__cell
               span.part.-repeat(
                 v-on='click: repeatClick(this)'
+                title='Background repeat'
               ) {{repeat}}
               
             .source__cell
               span.part.-position(
                 v-on='click: positionClick(this), mousedown: positionDrag($event, this)'
+                title='Background position (click to toggle or drag)'
               )
                 span {{isCenter ? 'center' : x}}{{isCenter ? '' : 'px'}}
                 span {{isCenter ? 'center' : y}}{{isCenter ? '' : 'px'}}
             .source__cell
               span.part.-size(
                 v-on='click: sizeClick(this), mousedown: sizeDrag(this, $event)'
+                title='Background size (click to toggle or drag)'
               ) {{size == 'auto' ? 'auto' : size + '%'}}
             .source__cell.-hide
               span.part.-hide(
                 v-on='click: hide($index)'
                 v-show='items.length > 1'
-              ) hide
+                title='Hide background'
+              ): i.fa.fa-eye-slash

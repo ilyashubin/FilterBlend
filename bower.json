@@ -17,7 +17,8 @@
   ],
   "dependencies": {
     "jquery": "1.*",
-    "vue": "~0.12.14"
+    "vue": "~0.12.14",
+    "font-awesome": "~4.4.0"
   },
   "overrides": {
     "jquery": {
@@ -25,6 +26,9 @@
     },
     "vue": {
       "main": "dist/vue.min.js"
+    },
+    "font-awesome": {
+      "main": "css/font-awesome.min.css"
     }
   }
 }

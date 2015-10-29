@@ -119,7 +119,7 @@ gulp.task 'serve', ->
 gulp.task 'default', ->
   runSequence 'serve', 'scripts', 'markup', 'styles'
 
-  watch ['src/styles/**/*.styl', 'src/b/**/*.styl'], -> runSequence 'styles'
-  watch ['src/views/*.jade', 'src/b/**/*.jade', 'bower.json'], -> runSequence 'markup'
+  watch ['src/styles/**/*.styl'], -> runSequence 'styles'
+  watch ['src/views/*.jade', 'src/partials/*.jade', 'bower.json'], -> runSequence 'markup'
   watch ['src/js/**/*.js'], -> runSequence 'scripts'
   watch ['dist/*.html', 'dist/js/**/*.js'], browserSync.reload

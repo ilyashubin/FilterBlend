@@ -5,10 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- build:css css/main.concat.css --><!-- bower:css -->
+<link rel="stylesheet" href="components/font-awesome/css/font-awesome.min.css" />
 <!-- endbower -->
     <link rel="stylesheet" href="css/main.css"/><!-- endbuild -->
   </head>
   <body>
+    <div class="github-badge"><a href="https://github.com/ilyashubin/FilterBlend"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a></div>
     <div class="templates">
       <template id="filters">
         <div class="sec__heading">
@@ -21,7 +23,7 @@
               <label v-class="is-active: enabled" class="filters__item">
                 <div class="check">
                   <input type="checkbox" v-model="enabled"/><span class="check__display"></span>
-                </div><span class="filters__label"><span class="filters__property">{{name}}</span><span v-on="mousedown: drag(this, $event)" class="filters__value">{{value.current}}{{value.measure}}</span></span>
+                </div><span class="filters__label"><span class="filters__property">{{name}}</span><span v-on="mousedown: drag(this, $event)" title="drag up or down to change" class="filters__value">{{value.current}}{{value.measure}}</span></span>
               </label>
             </div>
           </div>
@@ -43,17 +45,17 @@
           <div class="source__inner">
             <div v-repeat="items" v-class="is-selected: current == $index, is-hidden: hidden" class="source__item">
               <div class="source__cell">
-                <div v-on="click: switchSelected($index)" class="source__selected"></div>
+                <div v-on="click: switchSelected($index)" title="switch active background" class="source__selected"></div>
               </div>
               <div class="source__cell">
                 <label class="part -url"> 
                   <input type="text" v-model="url" v-on="keyup: getBackgroundSize(this)" class="source__input"/>
                 </label>
               </div>
-              <div class="source__cell"><span v-on="click: repeatClick(this)" class="part -repeat">{{repeat}}</span></div>
-              <div class="source__cell"><span v-on="click: positionClick(this), mousedown: positionDrag($event, this)" class="part -position"><span>{{isCenter ? 'center' : x}}{{isCenter ? '' : 'px'}}</span><span>{{isCenter ? 'center' : y}}{{isCenter ? '' : 'px'}}</span></span></div>
-              <div class="source__cell"><span v-on="click: sizeClick(this), mousedown: sizeDrag(this, $event)" class="part -size">{{size == 'auto' ? 'auto' : size + '%'}}</span></div>
-              <div class="source__cell -hide"><span v-on="click: hide($index)" v-show="items.length &gt; 1" class="part -hide">hide</span></div>
+              <div class="source__cell"><span v-on="click: repeatClick(this)" title="Background repeat" class="part -repeat">{{repeat}}</span></div>
+              <div class="source__cell"><span v-on="click: positionClick(this), mousedown: positionDrag($event, this)" title="Background position (click to toggle or drag)" class="part -position"><span>{{isCenter ? 'center' : x}}{{isCenter ? '' : 'px'}}</span><span>{{isCenter ? 'center' : y}}{{isCenter ? '' : 'px'}}</span></span></div>
+              <div class="source__cell"><span v-on="click: sizeClick(this), mousedown: sizeDrag(this, $event)" title="Background size (click to toggle or drag)" class="part -size">{{size == 'auto' ? 'auto' : size + '%'}}</span></div>
+              <div class="source__cell -hide"><span v-on="click: hide($index)" v-show="items.length &gt; 1" title="Hide background" class="part -hide"><i class="fa fa-eye-slash"></i></span></div>
             </div>
           </div>
         </div>

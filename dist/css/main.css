@@ -300,7 +300,8 @@ th {
   box-sizing: border-box;
 }
 html {
-  background: #bfcede url("../img/pattern.svg");
+  background: #bfcede url("../img/pattern.svg") center;
+  min-width: 860px;
   background-size: 170px;
   color: #000;
   font: 14px/1.4 'Helvetica', Arial, sans-serif;
@@ -589,6 +590,8 @@ p {
   color: #fff;
 }
 .source__cell.-hide {
+  font-size: 1.1em;
+  line-height: 1;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
       -ms-flex: 1;
