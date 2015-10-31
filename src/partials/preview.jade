@@ -1,13 +1,8 @@
 mixin preview()
   .preview
-    .preview__inner.sec(style='background-color: {{background.values[background.currentIndex]}}')
-      .preview__colors
-        .preview__colors-item(
-          v-repeat='background.values'
-          v-on='click: background.currentIndex = $index'
-          style='background-color: {{background.values[$index]}}'
-        )
+    .preview__inner.sec
+      filterblend-picker(v-ref='picker' color='{{@ color}}')
       .preview__screen(
-        style="{{previewStyle}}"
+        style="{{previewStyle}} background-color: {{color}};"
         v-on='mousedown: $.sources.positionDrag, click: $.sources.switchSelected'
       )

@@ -27,6 +27,9 @@
       line-height 1
       flex 1
       text-align right
+    &.-input
+      position relative
+      margin-right 4px
 
   &__selected
     display inline-block
@@ -43,16 +46,15 @@
   &__input
     display inline-block
     padding .36em 0
-    margin 0 .2em 0 .1em
     input
       color $text-sub
+      padding-right 2.3em
   &__upload
-    margin-right 3px
-    display inline-block
-    width 20px
-    height 20px
-    overflow hidden
-    line-height 18px
+    position absolute
+    top .36em
+    right 0
+    width 26px
+    line-height 30px
     font-size 1.1em
     text-align center
     cursor pointer
@@ -65,14 +67,17 @@
       visibility hidden
   .part
     display inline-block
-    padding .36em .6em
+    padding .32em .6em
     margin 0 .1em
     cursor pointer
     border-radius .28em
     transition background .2s, color .2s
     &:hover
-      background $base-sub
-      color #fff
+      color $base-sub
+    &.-hide
+      &:hover
+        background $base-sub
+        color #fff
     &.-url
       &:hover
         background transparent

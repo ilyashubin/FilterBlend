@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg viewBox="0 0 47 59" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path id="path-1" d="M23.260575,58.3376231 C35.9631242,58.3376231 46.260575,48.0401724 46.260575,35.3376231 C46.260575,22.6350739 23.260575,0.408081202 23.260575,0.408081202 C23.260575,0.408081202 0.260574971,22.6350739 0.260574971,35.3376231 C0.260574971,48.0401724 10.5580257,58.3376231 23.260575,58.3376231 Z"></path>
+        <linearGradient x1="43.5374784%" y1="-4.41299815%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#FFC2AC" offset="0%"></stop>
+            <stop stop-color="#F58C68" offset="72.9174186%"></stop>
+            <stop stop-color="#F18162" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#EBD9C4" offset="0%"></stop>
+            <stop stop-color="#F49289" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="98.443479%" id="linearGradient-5">
+            <stop stop-color="#FEC676" offset="0%"></stop>
+            <stop stop-color="#FFF9E2" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-6">
+            <stop stop-color="#F1A78C" offset="-19.0173696%"></stop>
+            <stop stop-color="#F39F8D" offset="0%"></stop>
+            <stop stop-color="#FF7791" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="19.8586866%" y1="-35.2799045%" x2="56.4275099%" y2="86.2814938%" id="linearGradient-7">
+            <stop stop-color="#E64376" offset="100%"></stop>
+            <stop stop-color="#F78399" offset="0%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Group" sketch:type="MSLayerGroup" transform="translate(0.564133, 0.008011)">
+            <mask id="mask-2" sketch:name="Mask" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#D8D8D8" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <g mask="url(#mask-2)" sketch:type="MSShapeGroup">
+                <g transform="translate(-40.000000, -55.000000)">
+                    <path d="M79.6239172,56.8726622 L52.7716036,75.0174444 L20.6185696,168.295315 L93.8556342,95.956708 L79.6239172,56.8726622 Z" id="Path-5" fill="url(#linearGradient-3)"></path>
+                    <path d="M18.046427,1.09469402 L79.4555901,56.8197288 L65.1348639,93.4434493 L18.046427,1.09469402 Z" id="Path-1" fill="url(#linearGradient-4)"></path>
+                    <path d="M17.8268613,0.637479448 L18.9206679,39.4734129 L65.3438033,93.1110724 L17.8268613,0.637479448 Z" id="Path-2" fill="url(#linearGradient-5)"></path>
+                    <path d="M19.1150953,39.3928921 L1.64182292,77.8613869 L65.2965331,92.9613964 L19.1150953,39.3928921 Z" id="Path-3" fill="url(#linearGradient-6)"></path>
+                    <path d="M1.63112579,77.7201204 L33.2343434,132.054235 L65.559581,92.8789808 L1.63112579,77.7201204 Z" id="Path-4" fill="url(#linearGradient-7)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

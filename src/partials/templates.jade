@@ -1,5 +1,29 @@
 mixin templates()
   .templates
+    //- picker
+    template#picker
+      .picker
+        .picker__item(v-class='is-open: opened')
+          .picker__current(
+            style='background: {{color == "transparent" ? "" : color}};'
+            v-on='click: open'
+            title='choose background color'
+          )
+          .picker__body
+            .picker__input
+              input(
+                type='text'
+                v-model='color'
+              ).inp-text
+              label.picker__call.fa.fa-eyedropper
+                input(type='color' v-model='color').inp-color
+            .picker__variants
+              .picker__variants-item(
+                v-repeat='presets'
+                style='background: {{$value == "transparent" ? "" : $value}};'
+                v-on='click: color = $value'
+              )
+              
     //- filters
     template#filters
       .sec__heading
@@ -27,8 +51,8 @@ mixin templates()
         .blend
           .blend__item(
             v-repeat='values'
-            v-on='click: current = $value'
-            v-class='is-active: current == $value'
+            v-on='click: current = $index'
+            v-class='is-active: current == $index'
           ) {{$value}}
     //- sources
     template#sources
@@ -43,14 +67,14 @@ mixin templates()
                 v-on='click: switchSelected($index)'
                 title='switch active background'
               )
-            .source__cell
+            .source__cell.-input
               label.source__input
                 input(
                   type='text'
                   v-model='url'
                   v-on='keyup: getBackgroundSize(this)'
                 )
-              label.source__upload
+              label.source__upload(title='choose local file')
                 i.fa.fa-file-image-o
                 input(type='file' v-on='change: readURL').source__upload
             .source__cell

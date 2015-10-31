@@ -1414,6 +1414,10 @@ var _componentsFilters = require('./components/filters');
 
 var _componentsFilters2 = _interopRequireDefault(_componentsFilters);
 
+var _componentsPicker = require('./components/picker');
+
+var _componentsPicker2 = _interopRequireDefault(_componentsPicker);
+
 /**
  * Main VM
  */
@@ -1422,10 +1426,7 @@ var mainData = {
   backgroundStr: '',
   blendStr: '',
   filtersStr: '',
-  background: {
-    currentIndex: 0,
-    values: ['#fff', '#2b2a2f', '#e45353', '#58cb6b']
-  }
+  color: 'transparent'
 };
 
 var main = new Vue({
@@ -1445,7 +1446,8 @@ var main = new Vue({
   components: {
     'filterblend-sources': _componentsSources2['default'],
     'filterblend-blend': _componentsBlend2['default'],
-    'filterblend-filters': _componentsFilters2['default']
+    'filterblend-filters': _componentsFilters2['default'],
+    'filterblend-picker': _componentsPicker2['default']
   },
   ready: initEvents
 });
@@ -1463,7 +1465,7 @@ function initEvents() {
 }
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/app.js","/")
-},{"./components/blend":6,"./components/filters":7,"./components/sources":8,"buffer":1,"helpers":10,"oMfpAn":4}],6:[function(require,module,exports){
+},{"./components/blend":6,"./components/filters":7,"./components/picker":8,"./components/sources":9,"buffer":1,"helpers":11,"oMfpAn":4}],6:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /**
  * Blend Mode VM
@@ -1475,7 +1477,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 var blendData = {
-  current: 'hard-light',
+  current: 8,
   values: ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity']
 };
 
@@ -1491,14 +1493,14 @@ exports['default'] = Vue.extend({
      * Reset blend mode to 'normal'
      */
     reset: function reset() {
-      this.current = this.values[0];
+      this.current = 0;
     },
 
     /**
      * Calculate blend styles for main VM
      */
     compileStyle: function compileStyle() {
-      this.str = 'background-blend-mode: ' + this.current + '; ';
+      this.str = 'background-blend-mode: ' + this.values[this.current] + '; ';
     }
   },
   watch: {
@@ -1687,7 +1689,70 @@ exports['default'] = Vue.extend({
 module.exports = exports['default'];
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/components/filters.js","/components")
-},{"../helpers":9,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
+},{"../helpers":10,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+
+/**
+ * Picker VM
+ */
+
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var filtersData = {
+  presets: ['#fff', '#2b2a2f', '#e45353', '#58cb6b', 'transparent'],
+  opened: false,
+  current: 'red'
+};
+
+exports['default'] = Vue.extend({
+  data: function data() {
+    return filtersData;
+  },
+  template: '#picker',
+  props: ['color'],
+  methods: {
+    open: function open() {
+      this.opened = !this.opened;
+    },
+    close: function close() {
+      this.opened = false;
+    },
+    compileStyle: function compileStyle() {
+      // this.color = this.current;
+    }
+  },
+  watch: {
+    'current': {
+      deep: true,
+      handler: function handler() {
+        this.compileStyle();
+      }
+    }
+  },
+  ready: function ready() {
+    this.compileStyle();
+    initEvents.call(this);
+  }
+});
+
+function initEvents() {
+
+  /**
+   * Close colorpicker popup on document click
+   */
+  var self = this;
+  $(document).on('click', function (e) {
+    if ($(e.target).closest('.picker').length) return;
+    self.close();
+  });
+}
+module.exports = exports['default'];
+
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/components/picker.js","/components")
+},{"buffer":1,"oMfpAn":4}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -1935,7 +2000,7 @@ exports['default'] = Vue.extend({
 module.exports = exports['default'];
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/components/sources.js","/components")
-},{"../helpers":9,"buffer":1,"oMfpAn":4}],9:[function(require,module,exports){
+},{"../helpers":10,"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 
 /**
@@ -1986,7 +2051,7 @@ exports.nextArrayIndex = nextArrayIndex;
 exports.range = range;
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/helpers.js","/")
-},{"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 
 /**

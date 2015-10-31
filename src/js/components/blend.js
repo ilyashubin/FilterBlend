@@ -3,7 +3,7 @@
  */
 
 let blendData = {
-  current: 'hard-light',
+  current: 8,
   values: [
     'normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten',
     'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference',
@@ -21,14 +21,14 @@ export default Vue.extend({
      * Reset blend mode to 'normal'
      */
     reset() {
-      this.current = this.values[0];
+      this.current = 0;
     },
 
     /**
      * Calculate blend styles for main VM
      */
     compileStyle() {
-      this.str = `background-blend-mode: ${this.current}; `;
+      this.str = `background-blend-mode: ${this.values[this.current]}; `;
     },
   },
   watch: {

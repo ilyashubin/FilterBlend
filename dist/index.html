@@ -10,8 +10,26 @@
     <link rel="stylesheet" href="css/main.css"/><!-- endbuild -->
   </head>
   <body>
-    <div class="github-badge"><a href="https://github.com/ilyashubin/FilterBlend"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a></div>
+    <div class="github-badge"><a href="https://github.com/ilyashubin/FilterBlend" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a></div>
     <div class="templates">
+      <template id="picker">
+        <div class="picker">
+          <div v-class="is-open: opened" class="picker__item">
+            <div style="background: {{color == &quot;transparent&quot; ? &quot;&quot; : color}};" v-on="click: open" title="choose background color" class="picker__current"></div>
+            <div class="picker__body">
+              <div class="picker__input">
+                <input type="text" v-model="color" class="inp-text"/>
+                <label class="picker__call fa fa-eyedropper">
+                  <input type="color" v-model="color" class="inp-color"/>
+                </label>
+              </div>
+              <div class="picker__variants">
+                <div v-repeat="presets" style="background: {{$value == &quot;transparent&quot; ? &quot;&quot; : $value}};" v-on="click: color = $value" class="picker__variants-item"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
       <template id="filters">
         <div class="sec__heading">
           <div class="sec__label">filters</div>
@@ -36,7 +54,7 @@
         </div>
         <div class="sec__inner">
           <div class="blend">
-            <div v-repeat="values" v-on="click: current = $value" v-class="is-active: current == $value" class="blend__item">{{$value}}</div>
+            <div v-repeat="values" v-on="click: current = $index" v-class="is-active: current == $index" class="blend__item">{{$value}}</div>
           </div>
         </div>
       </template>
@@ -47,11 +65,11 @@
               <div class="source__cell">
                 <div v-on="click: switchSelected($index)" title="switch active background" class="source__selected"></div>
               </div>
-              <div class="source__cell">
+              <div class="source__cell -input">
                 <label class="source__input">
                   <input type="text" v-model="url" v-on="keyup: getBackgroundSize(this)"/>
                 </label>
-                <label class="source__upload"><i class="fa fa-file-image-o"></i>
+                <label title="choose local file" class="source__upload"><i class="fa fa-file-image-o"></i>
                   <input type="file" v-on="change: readURL" class="source__upload"/>
                 </label>
               </div>
@@ -80,11 +98,9 @@
           <div class="container__main-inner">
             <filterblend-sources v-ref="sources" str="{{@ backgroundStr}}"></filterblend-sources>
             <div class="preview">
-              <div style="background-color: {{background.values[background.currentIndex]}}" class="preview__inner sec">
-                <div class="preview__colors">
-                  <div v-repeat="background.values" v-on="click: background.currentIndex = $index" style="background-color: {{background.values[$index]}}" class="preview__colors-item"></div>
-                </div>
-                <div style="{{previewStyle}}" v-on="mousedown: $.sources.positionDrag, click: $.sources.switchSelected" class="preview__screen"></div>
+              <div class="preview__inner sec">
+                <filterblend-picker v-ref="picker" color="{{@ color}}"></filterblend-picker>
+                <div style="{{previewStyle}} background-color: {{color}};" v-on="mousedown: $.sources.positionDrag, click: $.sources.switchSelected" class="preview__screen"></div>
               </div>
             </div>
           </div>

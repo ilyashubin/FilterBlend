@@ -3,6 +3,7 @@ import { helpers } from 'helpers';
 import Sources from './components/sources';
 import Blend from './components/blend';
 import Filters from './components/filters';
+import Picker from './components/picker';
 
 
 /**
@@ -13,10 +14,7 @@ let mainData = {
   backgroundStr: '',
   blendStr: '',
   filtersStr: '',
-  background: {
-    currentIndex: 0,
-    values: ['#fff', '#2b2a2f', '#e45353', '#58cb6b'],
-  }
+  color: 'transparent',
 };
 
 let main = new Vue({
@@ -37,6 +35,7 @@ let main = new Vue({
     'filterblend-sources': Sources,
     'filterblend-blend': Blend,
     'filterblend-filters': Filters,
+    'filterblend-picker': Picker,
   },
   ready: initEvents,
 });
