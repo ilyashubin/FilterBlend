@@ -1485,7 +1485,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 var blendData = {
-  current: 8,
+  current: 1,
   values: ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity']
 };
 
@@ -1542,7 +1542,7 @@ var filtersData = {
     name: 'saturate',
     enabled: false,
     value: {
-      current: 2.5,
+      current: 2,
       measure: '',
       pace: 0.5,
       step: 0.1,
@@ -1573,7 +1573,7 @@ var filtersData = {
     name: 'brightness',
     enabled: false,
     value: {
-      current: 1,
+      current: 1.5,
       measure: '',
       step: 0.01,
       min: 0,
@@ -1583,7 +1583,7 @@ var filtersData = {
     name: 'contrast',
     enabled: false,
     value: {
-      current: 1,
+      current: 1.5,
       measure: '',
       step: 0.1,
       min: 0,
@@ -1593,7 +1593,7 @@ var filtersData = {
     name: 'hue-rotate',
     enabled: false,
     value: {
-      current: 60,
+      current: 30,
       measure: 'deg',
       step: 1,
       min: 0,
@@ -1603,7 +1603,7 @@ var filtersData = {
     name: 'invert',
     enabled: false,
     value: {
-      current: 0.5,
+      current: 1,
       measure: '',
       step: 0.01,
       min: 0,
@@ -1623,9 +1623,9 @@ var filtersData = {
     name: 'blur',
     enabled: false,
     value: {
-      current: 5,
+      current: 5.0,
       measure: 'px',
-      step: 0.1,
+      step: 0.5,
       min: 0,
       max: 100
     }
@@ -1653,6 +1653,8 @@ exports['default'] = Vue.extend({
         item.value.current = Math.round((curr - (evt.pageY - originY) * item.value.step) * 10) / 10;
         // value should be in min/max range
         item.value.current = _helpers.range.between(item.value.current, item.value.min, item.value.max);
+
+        if (item.value.step % 1 !== 0) item.value.current = item.value.current.toFixed(1);
       });
     },
 
@@ -1774,7 +1776,7 @@ var sourcesData = {
     x: 70,
     y: 50,
     isCenter: true,
-    size: 'auto',
+    size: 62,
     imgSize: {
       width: 0,
       height: 0,
@@ -1787,7 +1789,7 @@ var sourcesData = {
     x: 50,
     y: 50,
     isCenter: true,
-    size: 'auto',
+    size: 125,
     imgSize: {
       width: 0,
       height: 0,

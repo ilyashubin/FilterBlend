@@ -41,7 +41,7 @@
           flex-direction: column;
 }
 .container__options {
-  width: 360px;
+  width: 380px;
 }
 .sec {
   background: #fff;
@@ -140,8 +140,7 @@
   background: #fff;
   width: 4px;
   padding: 0;
-  top: 1px;
-  bottom: 20px;
+  bottom: 24px;
 }
 .nano > .nano-pane:hover > .nano-slider {
   opacity: 1;
@@ -576,7 +575,7 @@ p {
   font-weight: 600;
   letter-spacing: 0.03em;
   cursor: pointer;
-  margin-bottom: 0.7em;
+  margin-bottom: 0.8em;
   -webkit-transition: 0.15s;
           transition: 0.15s;
 }

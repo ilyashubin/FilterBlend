@@ -10,7 +10,7 @@ let filtersData = {
       name: 'saturate',
       enabled: false,
       value: {
-        current: 2.5,
+        current: 2,
         measure: '',
         pace: 0.5,
         step: 0.1,
@@ -44,7 +44,7 @@ let filtersData = {
       name: 'brightness',
       enabled: false,
       value: {
-        current: 1,
+        current: 1.5,
         measure: '',
         step: 0.01,
         min: 0,
@@ -55,7 +55,7 @@ let filtersData = {
       name: 'contrast',
       enabled: false,
       value: {
-        current: 1,
+        current: 1.5,
         measure: '',
         step: 0.1,
         min: 0,
@@ -66,7 +66,7 @@ let filtersData = {
       name: 'hue-rotate',
       enabled: false,
       value: {
-        current: 60,
+        current: 30,
         measure: 'deg',
         step: 1,
         min: 0,
@@ -77,7 +77,7 @@ let filtersData = {
       name: 'invert',
       enabled: false,
       value: {
-        current: 0.5,
+        current: 1,
         measure: '',
         step: 0.01,
         min: 0,
@@ -99,9 +99,9 @@ let filtersData = {
       name: 'blur',
       enabled: false,
       value: {
-        current: 5,
+        current: 5.0,
         measure: 'px',
-        step: 0.1,
+        step: 0.5,
         min: 0,
         max: 100,
       },
@@ -129,6 +129,9 @@ export default Vue.extend({
           item.value.step) * 10) / 10;
         // value should be in min/max range
         item.value.current = range.between(item.value.current, item.value.min, item.value.max);
+
+        if (item.value.step % 1 !== 0)
+          item.value.current = item.value.current.toFixed(1);
       });
     },
 

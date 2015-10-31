@@ -18,7 +18,7 @@ let sourcesData = {
       x: 70,
       y: 50,
       isCenter: true,
-      size: 'auto',
+      size: 62,
       imgSize: {
         width: 0,
         height: 0,
@@ -32,7 +32,7 @@ let sourcesData = {
       x: 50,
       y: 50,
       isCenter: true,
-      size: 'auto',
+      size: 125,
       imgSize: {
         width: 0,
         height: 0,
