@@ -1771,7 +1771,7 @@ var sourcesData = {
     height: 0
   },
   items: [{
-    url: 'http://a629.phobos.apple.com/us/r30/Purple3/v4/d9/f0/0e/d9f00e8a-c409-efc0-5ec2-db34e8d42587/mzl.fmbbrygq.png',
+    url: 'img/doge.png',
     repeat: 'no-repeat',
     x: 70,
     y: 50,
@@ -1784,7 +1784,7 @@ var sourcesData = {
     },
     hidden: false
   }, {
-    url: 'https://snap-photos.s3.amazonaws.com/img-thumbs/960w/83029FC2F1.jpg',
+    url: 'img/landscape.jpg',
     repeat: 'no-repeat',
     x: 50,
     y: 50,
