@@ -1453,7 +1453,9 @@ var main = new Vue({
 });
 
 function initEvents() {
+
   var $win = $(window);
+
   $('input').on('focus', function () {
     setTimeout(this.select.bind(this), 50);
   });
@@ -1823,6 +1825,9 @@ exports['default'] = Vue.extend({
         item.x = (this.preview.width - this.preview.width * item.size / 100) / 2;
         item.y = (this.preview.height - this.preview.width * item.size / item.imgSize.aspectRatio / 100) / 2;
       }
+
+      item.x = Math.round(item.x);
+      item.y = Math.round(item.y);
     },
 
     /**

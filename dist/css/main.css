@@ -118,8 +118,18 @@
       -ms-user-select: none;
           user-select: none;
 }
+.github-badge a {
+  display: block;
+  -webkit-clip-path: polygon(100% 0, 0 0, 100% 100%);
+          clip-path: polygon(100% 0, 0 0, 100% 100%);
+  -webkit-transition: 0.15s;
+          transition: 0.15s;
+}
+.github-badge a:hover {
+  opacity: 0.8;
+}
 .github-badge img {
-  max-height: 135px;
+  max-height: 130px;
 }
 /* normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
@@ -666,7 +676,7 @@ p {
   width: 10px;
   height: 10px;
   margin-left: -6px;
-  border-radius: 3px;
+  border-top-right-radius: 3px;
   background: #fff;
   -webkit-transform: rotate(45deg);
       -ms-transform: rotate(45deg);

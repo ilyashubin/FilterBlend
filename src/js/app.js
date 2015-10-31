@@ -5,7 +5,6 @@ import Blend from './components/blend';
 import Filters from './components/filters';
 import Picker from './components/picker';
 
-
 /**
  * Main VM
  */
@@ -41,7 +40,9 @@ let main = new Vue({
 });
 
 function initEvents() {
+
   let $win = $(window);
+
   $('input').on('focus', function() {
     setTimeout(this.select.bind(this), 50);
   });
@@ -50,4 +51,5 @@ function initEvents() {
     $win.off('mousemove.filt');
     helpers.toggleDragOverlay(false);
   });
+
 }
