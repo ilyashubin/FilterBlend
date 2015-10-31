@@ -1721,29 +1721,16 @@ exports['default'] = Vue.extend({
     },
     close: function close() {
       this.opened = false;
-    },
-    compileStyle: function compileStyle() {
-      // this.color = this.current;
     }
   },
-  watch: {
-    'current': {
-      deep: true,
-      handler: function handler() {
-        this.compileStyle();
-      }
-    }
-  },
-  ready: function ready() {
-    this.compileStyle();
-    initEvents.call(this);
-  }
+  ready: initEvents
 });
 
 function initEvents() {
 
   /**
-   * Close colorpicker popup on document click
+   * Close colorpicker popup
+   * on document click
    */
   var self = this;
   $(document).on('click', function (e) {
@@ -1863,11 +1850,10 @@ exports['default'] = Vue.extend({
       item = item || this.items[this.current];
       var incX = item.x;
       var incY = item.y;
-      var originX = e.clientX;
-      var originY = e.clientY;
+      var originX = e.pageX;
+      var originY = e.pageY;
 
       _helpers.helpers.drag(function (evt) {
-        // image not centered anymore
         item.isCenter = false;
 
         item.x = incX + (evt.pageX - originX);
@@ -1886,7 +1872,7 @@ exports['default'] = Vue.extend({
       var _this = this;
 
       // calculate image width in percents from its original size
-      var startingPoint = _helpers.range.lower(Math.floor(item.imgSize.width * 100 / this.preview.width), 100);
+      var startingPoint = _helpers.range.lower(Math.round(item.imgSize.width * 100 / this.preview.width), 100);
       // set starting drag point
       var curr = item.size == 'auto' ? startingPoint : item.size;
       var originY = e.clientY;

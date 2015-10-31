@@ -19,27 +19,16 @@ export default Vue.extend({
     },
     close() {
       this.opened = false;
-    },
-    compileStyle() {
-      // this.color = this.current;
-    },
-  },
-  watch: {
-    'current': {
-      deep: true,
-      handler() {this.compileStyle();},
     }
   },
-  ready() {
-    this.compileStyle();
-    initEvents.call(this);
-  },
+  ready: initEvents,
 });
 
 function initEvents() {
 
   /**
-   * Close colorpicker popup on document click
+   * Close colorpicker popup
+   * on document click
    */
   let self = this;
   $(document).on('click', function(e) {

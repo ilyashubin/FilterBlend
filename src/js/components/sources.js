@@ -101,11 +101,10 @@ export default Vue.extend({
       item = item || this.items[this.current];
       let incX = item.x;
       let incY = item.y;
-      let originX = e.clientX;
-      let originY = e.clientY;
+      let originX = e.pageX;
+      let originY = e.pageY;
 
       helpers.drag((evt)=> {
-        // image not centered anymore
         item.isCenter = false;
 
         item.x = incX + (evt.pageX - originX);
@@ -122,7 +121,7 @@ export default Vue.extend({
     },
     sizeDrag(item, e) {
       // calculate image width in percents from its original size
-      let startingPoint = range.lower(Math.floor(item.imgSize.width * 100 / this.preview.width), 100);
+      let startingPoint = range.lower(Math.round(item.imgSize.width * 100 / this.preview.width), 100);
       // set starting drag point
       let curr = item.size == 'auto' ? startingPoint : item.size;
       let originY = e.clientY;

@@ -803,7 +803,7 @@ p {
   color: #eee !important;
 }
 .source__item.is-hidden .part.-hide {
-  background-color: #ffa500;
+  background-color: #e88d93 !important;
   color: #fff;
 }
 .source__cell.-hide {
