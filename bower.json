@@ -18,7 +18,8 @@
   "dependencies": {
     "jquery": "1.*",
     "vue": "~0.12.14",
-    "font-awesome": "~4.4.0"
+    "font-awesome": "~4.4.0",
+    "nanoscroller": "~0.8.7"
   },
   "overrides": {
     "jquery": {

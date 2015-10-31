@@ -52,4 +52,10 @@ function initEvents() {
     helpers.toggleDragOverlay(false);
   });
 
+  $(".nano").nanoScroller({
+    iOSNativeScrolling: true,
+    alwaysVisible: true,
+    sliderMaxHeight: 450,
+  });
+
 }

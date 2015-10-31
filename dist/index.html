@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- build:css css/main.concat.css --><!-- bower:css -->
 <link rel="stylesheet" href="components/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="components/nanoscroller/bin/css/nanoscroller.css" />
 <!-- endbower -->
     <link rel="stylesheet" href="css/main.css"/><!-- endbuild -->
   </head>
@@ -100,19 +101,33 @@
             <div class="preview">
               <div class="preview__inner sec">
                 <filterblend-picker v-ref="picker" color="{{@ color}}"></filterblend-picker>
-                <div style="{{previewStyle}} background-color: {{color}};" v-on="mousedown: $.sources.positionDrag, click: $.sources.switchSelected" class="preview__screen"></div>
+                <div style="{{previewStyle}} background-color: {{color}};" v-on="mousedown: $.sources.positionDrag, click: $.sources.switchSelected, mousewheel: $.sources.sizeMouseWheel($event)" class="preview__screen"></div>
               </div>
             </div>
           </div>
         </div>
         <div class="container__options">
-          <div class="options">
-            <div class="options__inner">
+          <div class="options nano">
+            <div class="options__inner nano-content">
               <div class="options__section sec -blend">
                 <filterblend-blend v-ref="blend" str="{{@ blendStr}}"></filterblend-blend>
               </div>
               <div class="options__section sec -filters">
                 <filterblend-filters v-ref="filters" str="{{@ filtersStr}}"></filterblend-filters>
+              </div>
+              <div class="options__section sec -manual">
+                <div class="sec__heading">
+                  <div class="sec__label">How to use</div>
+                </div>
+                <div class="howto">
+                  <ul>
+                    <li>Just paste image URL you want to preview, or pick your local image by clicking <i class='fa fa-file-image-o'></i></li>
+                    <li>Click on position control to set value to 'center'. Click on size control to set it to 'auto'.</li>
+                    <li>Drag preview area to change image position or use mouse wheel to change image size. </li>
+                    <li>Switch current image by click on the preview area.</li>
+                    <li>To change background color use color picker in the top right corner of the preview area.</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -121,6 +136,7 @@
     </div><!-- build:js js/app.concat.js --><!-- bower:js -->
 <script src="components/jquery/dist/jquery.min.js"></script>
 <script src="components/vue/dist/vue.min.js"></script>
+<script src="components/nanoscroller/bin/javascripts/jquery.nanoscroller.js"></script>
 <!-- endbower -->
     <script src="js/app.js"></script><!-- endbuild -->
   </body>

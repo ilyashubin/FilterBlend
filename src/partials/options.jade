@@ -1,9 +1,13 @@
 mixin options()
-  .options
-    .options__inner
+  .options.nano
+    .options__inner.nano-content
       .options__section.sec.-blend
         filterblend-blend(v-ref='blend' str='{{@ blendStr}}')
       .options__section.sec.-filters
         filterblend-filters(v-ref='filters' str='{{@ filtersStr}}')
+      .options__section.sec.-manual
+        .sec__heading
+          .sec__label How to use
+        +howto()
         
         

@@ -4,5 +4,5 @@ mixin preview()
       filterblend-picker(v-ref='picker' color='{{@ color}}')
       .preview__screen(
         style="{{previewStyle}} background-color: {{color}};"
-        v-on='mousedown: $.sources.positionDrag, click: $.sources.switchSelected'
+        v-on='mousedown: $.sources.positionDrag, click: $.sources.switchSelected, mousewheel: $.sources.sizeMouseWheel($event)'
       )

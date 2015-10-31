@@ -1464,6 +1464,12 @@ function initEvents() {
     $win.off('mousemove.filt');
     _helpers.helpers.toggleDragOverlay(false);
   });
+
+  $(".nano").nanoScroller({
+    iOSNativeScrolling: true,
+    alwaysVisible: true,
+    sliderMaxHeight: 450
+  });
 }
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/app.js","/")
@@ -1872,15 +1878,28 @@ exports['default'] = Vue.extend({
       var _this = this;
 
       // calculate image width in percents from its original size
-      var startingPoint = _helpers.range.lower(Math.round(item.imgSize.width * 100 / this.preview.width), 100);
+      var startingPoint = _helpers.range.lower(Math.round(item.imgSize.width * 100 / this.preview.width), 200);
       // set starting drag point
       var curr = item.size == 'auto' ? startingPoint : item.size;
-      var originY = e.clientY;
 
-      _helpers.helpers.drag(function (evt) {
-        item.size = _helpers.range.between(curr - (evt.pageY - originY), 0, 100);
-        _this.setCentredCoordinates(item);
-      });
+      // size can be changed by drag or by mouse wheel
+      if (e.type == 'mousewheel') {
+        item.size = _helpers.range.between(e.deltaY < 0 ? curr + 5 : curr - 5, 0, 200);
+        this.setCentredCoordinates(item);
+      } else {
+        (function () {
+          var originY = e.clientY;
+
+          _helpers.helpers.drag(function (evt) {
+            item.size = _helpers.range.between(curr - (evt.pageY - originY), 0, 200);
+            _this.setCentredCoordinates(item);
+          });
+        })();
+      }
+    },
+
+    sizeMouseWheel: function sizeMouseWheel(e) {
+      this.sizeDrag(this.items[this.current], e);
     },
 
     /**
@@ -1892,6 +1911,7 @@ exports['default'] = Vue.extend({
         this.items[index].hidden = false;
         return;
       }
+
       this.items.forEach(function (el) {
         el.hidden = false;
       });
@@ -1907,6 +1927,7 @@ exports['default'] = Vue.extend({
       var _this2 = this;
 
       if (!Array.isArray(items)) items = [items];
+
       items.forEach(function (item) {
         if (onResize && !item.isCenter) return;
         item.isCenter = true;
@@ -1916,14 +1937,17 @@ exports['default'] = Vue.extend({
     getBackgroundSize: function getBackgroundSize(items) {
       var self = this;
       if (!Array.isArray(items)) items = [items];
+
       items.forEach(function (item) {
         var img = new Image();
+
         img.onload = function () {
           item.imgSize.width = this.width;
           item.imgSize.height = this.height;
           item.imgSize.aspectRatio = this.width / this.height;
           self.centerBackground(item);
         };
+
         img.src = item.url;
       });
     },

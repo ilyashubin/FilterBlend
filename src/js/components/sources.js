@@ -121,15 +121,26 @@ export default Vue.extend({
     },
     sizeDrag(item, e) {
       // calculate image width in percents from its original size
-      let startingPoint = range.lower(Math.round(item.imgSize.width * 100 / this.preview.width), 100);
+      let startingPoint = range.lower(Math.round(item.imgSize.width * 100 / this.preview.width), 200);
       // set starting drag point
       let curr = item.size == 'auto' ? startingPoint : item.size;
-      let originY = e.clientY;
 
-      helpers.drag((evt)=> {
-        item.size = range.between((curr - (evt.pageY - originY)), 0, 100);
+      // size can be changed by drag or by mouse wheel
+      if (e.type == 'mousewheel') {
+        item.size = range.between(((e.deltaY < 0) ? curr + 5 : curr - 5), 0, 200);
         this.setCentredCoordinates(item);
-      });
+      } else {
+        let originY = e.clientY;
+
+        helpers.drag((evt)=> {
+          item.size = range.between((curr - (evt.pageY - originY)), 0, 200);
+          this.setCentredCoordinates(item);
+        });
+      }
+    },
+
+    sizeMouseWheel(e) {
+      this.sizeDrag(this.items[this.current], e);
     },
 
     /**
@@ -141,6 +152,7 @@ export default Vue.extend({
         this.items[index].hidden = false;
         return;
       }
+
       this.items.forEach((el)=> {el.hidden = false});
       this.items[index].hidden = true;
 
@@ -153,6 +165,7 @@ export default Vue.extend({
      */
     centerBackground(items, onResize) {
       if (!Array.isArray(items)) items = [items];
+
       items.forEach((item)=> {
         if (onResize && !item.isCenter) return;
         item.isCenter = true;
@@ -162,14 +175,17 @@ export default Vue.extend({
     getBackgroundSize(items) {
       let self = this;
       if (!Array.isArray(items)) items = [items];
+
       items.forEach((item)=> {
         let img = new Image();
+
         img.onload = function() {
           item.imgSize.width = this.width;
           item.imgSize.height = this.height;
           item.imgSize.aspectRatio = this.width / this.height;
           self.centerBackground(item);
         }
+
         img.src = item.url;
       });
     },
