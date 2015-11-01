@@ -15,7 +15,7 @@ let sourcesData = {
     {
       url: 'img/doge.png',
       repeat: 'no-repeat',
-      x: 70,
+      x: 50,
       y: 50,
       isCenter: true,
       size: 62,
@@ -27,12 +27,12 @@ let sourcesData = {
       hidden: false,
     },
     {
-      url: 'img/landscape.jpg',
+      url: 'img/nightsky.jpg',
       repeat: 'no-repeat',
       x: 50,
       y: 50,
       isCenter: true,
-      size: 125,
+      size: 165,
       imgSize: {
         width: 0,
         height: 0,

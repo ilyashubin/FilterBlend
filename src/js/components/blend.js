@@ -3,7 +3,7 @@
  */
 
 let blendData = {
-  current: 1,
+  current: 6,
   values: [
     'normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten',
     'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference',

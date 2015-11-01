@@ -2476,7 +2476,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 var blendData = {
-  current: 1,
+  current: 6,
   values: ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity']
 };
 
@@ -2764,7 +2764,7 @@ var sourcesData = {
   items: [{
     url: 'img/doge.png',
     repeat: 'no-repeat',
-    x: 70,
+    x: 50,
     y: 50,
     isCenter: true,
     size: 62,
@@ -2775,12 +2775,12 @@ var sourcesData = {
     },
     hidden: false
   }, {
-    url: 'img/landscape.jpg',
+    url: 'img/nightsky.jpg',
     repeat: 'no-repeat',
     x: 50,
     y: 50,
     isCenter: true,
-    size: 125,
+    size: 165,
     imgSize: {
       width: 0,
       height: 0,
