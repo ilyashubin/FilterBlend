@@ -1418,62 +1418,128 @@ var _componentsPicker = require('./components/picker');
 
 var _componentsPicker2 = _interopRequireDefault(_componentsPicker);
 
+var _componentsOutput = require('./components/output');
+
+var _componentsOutput2 = _interopRequireDefault(_componentsOutput);
+
 /**
  * Main VM
  */
 
-var mainData = {
+var data = {
   backgroundStr: '',
   blendStr: '',
-  filtersStr: '',
+  filterStr: '',
   color: 'transparent'
 };
 
 var main = new Vue({
-  el: '.container__app',
-  data: mainData,
+  data: data,
+  el: '#app',
+
   computed: {
     previewStyle: function previewStyle() {
-      var style = '';
+      var s = '';
 
-      style += this.blendStr;
-      style += this.backgroundStr;
-      style += this.filtersStr;
+      s += this.blendStr;
+      s += this.backgroundStr;
+      s += '-webkit-' + this.filterStr;
+      s += this.filterStr;
+      s += 'background-color: ' + this.color + ';';
 
-      return style;
+      return s;
+    },
+    outputStr: function outputStr() {
+      return this.blendStr + '\n' + this.filterStr;
     }
   },
-  components: {
-    'filterblend-sources': _componentsSources2['default'],
-    'filterblend-blend': _componentsBlend2['default'],
-    'filterblend-filters': _componentsFilters2['default'],
-    'filterblend-picker': _componentsPicker2['default']
+
+  methods: {
+    handleEvents: function handleEvents(e) {
+      var methodsMap = {
+        'mousedown': 'changePosition',
+        'click': 'switchSelected',
+        'wheel': 'changeSize'
+      };
+
+      var method = methodsMap[e.type];
+
+      method && this.$refs.sources[method].apply(this, arguments);
+    }
   },
-  ready: initEvents
+
+  components: {
+    'sources': _componentsSources2['default'],
+    'blend': _componentsBlend2['default'],
+    'filters': _componentsFilters2['default'],
+    'picker': _componentsPicker2['default'],
+    'output': _componentsOutput2['default']
+  },
+
+  ready: postBind
 });
 
-function initEvents() {
+function postBind() {
+  var _this = this;
 
   var $win = $(window);
 
-  $('input').on('focus', function () {
+  $('.preview__screen').on('mousedown click wheel', function (e) {
+    _this.handleEvents(e.originalEvent);
+  });
+
+  $(document).on('focus', 'input', function () {
     setTimeout(this.select.bind(this), 50);
   });
 
   $win.on('mouseup', function () {
-    $win.off('mousemove.filt');
+    $win.off('mousemove.fb');
     _helpers.helpers.toggleDragOverlay(false);
   });
 
+  /**
+   * Custom scrollbar
+   */
   $(".nano").nanoScroller({
     iOSNativeScrolling: true,
     alwaysVisible: true,
     sliderMaxHeight: 450
   });
+
+  /**
+   * Hint popup
+   */
+  var isHintClosed = localStorage.getItem('isHintClosed');
+  if (!isHintClosed) {
+    (function () {
+      var $hintBody = $('.js-hint').addClass('is-visible');
+
+      $hintBody.on('click', function () {
+        $hintBody.removeClass('is-visible');
+        localStorage.isHintClosed = true;
+      });
+    })();
+  }
+
+  /**
+   * Twitter share window
+   */
+  $('.share').click(function () {
+    var width = 575,
+        height = 400,
+        left = ($(window).width() - width) / 2,
+        top = ($(window).height() - height) / 2,
+        url = this.href,
+        opts = 'status=1' + ',width=' + width + ',height=' + height + ',top=' + top + ',left=' + left;
+
+    window.open(url, 'twitter', opts);
+
+    return false;
+  });
 }
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/app.js","/")
-},{"./components/blend":6,"./components/filters":7,"./components/picker":8,"./components/sources":9,"buffer":1,"helpers":11,"oMfpAn":4}],6:[function(require,module,exports){
+},{"./components/blend":6,"./components/filters":7,"./components/output":8,"./components/picker":9,"./components/sources":10,"buffer":1,"helpers":12,"oMfpAn":4}],6:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /**
  * Blend Mode VM
@@ -1484,42 +1550,39 @@ function initEvents() {
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var blendData = {
+var _data = {
   current: 6,
   values: ['normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten', 'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference', 'exclusion', 'hue', 'saturation', 'color', 'luminosity']
 };
 
-exports['default'] = Vue.extend({
+exports['default'] = {
   data: function data() {
-    return blendData;
+    return _data;
   },
   template: '#blend',
   props: ['str'],
+
   methods: {
 
-    /**
-     * Reset blend mode to 'normal'
-     */
     reset: function reset() {
       this.current = 0;
     },
 
-    /**
-     * Calculate blend styles for main VM
-     */
     compileStyle: function compileStyle() {
       this.str = 'background-blend-mode: ' + this.values[this.current] + '; ';
     }
   },
+
   watch: {
     'current': function current() {
       this.compileStyle();
     }
   },
+
   ready: function ready() {
     this.compileStyle();
   }
-});
+};
 module.exports = exports['default'];
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/components/blend.js","/components")
@@ -1537,7 +1600,7 @@ var _helpers = require('../helpers');
  * Filters VM
  */
 
-var filtersData = {
+var _data = {
   filters: [{
     name: 'saturate',
     enabled: false,
@@ -1632,58 +1695,53 @@ var filtersData = {
   }]
 };
 
-exports['default'] = Vue.extend({
+exports['default'] = {
   data: function data() {
-    return filtersData;
+    return _data;
   },
   template: '#filters',
   props: ['str'],
+
   methods: {
 
-    /**
-     * Drag filter value with certain step
-     */
-    drag: function drag(item, e) {
+    change: function change(e, item) {
       var curr = item.value.current;
-      var originY = e.clientY;
+      var originY = e.pageY;
 
       _helpers.helpers.drag(function (evt) {
         item.enabled = true;
 
         item.value.current = Math.round((curr - (evt.pageY - originY) * item.value.step) * 10) / 10;
-        // value should be in min/max range
+
         item.value.current = _helpers.range.between(item.value.current, item.value.min, item.value.max);
 
         if (item.value.step % 1 !== 0) item.value.current = item.value.current.toFixed(1);
-      });
+      }, true);
     },
 
-    /**
-     * Reset all filters
-     */
     reset: function reset() {
       this.filters.forEach(function (el) {
         return el.enabled = false;
       });
     },
 
-    /**
-     * Calculate filters styles for main VM
-     */
     compileStyle: function compileStyle() {
       var s = '';
       var enabled = 0;
+
       for (var i = 0, len = this.filters.length; i < len; i++) {
         var curr = this.filters[i];
         if (!curr.enabled) continue;
         enabled++;
         s += curr.name + '(' + curr.value.current + curr.value.measure + ') ';
       }
-      if (!enabled) s += 'none';
-      this.str = '-webkit-filter: ' + s + ';';
-      this.str += 'filter: ' + s + ';';
+      s = s.slice(0, -1);
+      if (!enabled) s = 'none';
+
+      this.str = 'filter: ' + s + ';';
     }
   },
+
   watch: {
     'filters': {
       deep: true,
@@ -1692,14 +1750,48 @@ exports['default'] = Vue.extend({
       }
     }
   },
+
   ready: function ready() {
     this.compileStyle();
   }
-});
+};
 module.exports = exports['default'];
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/components/filters.js","/components")
-},{"../helpers":10,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
+},{"../helpers":11,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+/**
+ * Output VM
+ */
+
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = {
+  template: '#output',
+  props: ['str'],
+  watch: {
+    'str': function str() {
+      Vue.nextTick(this.highlight);
+    }
+  },
+  ready: function ready() {
+    this.highlight = highlight();
+  }
+};
+
+function highlight() {
+  var $outputBody = document.querySelector('.language-css');
+  return function () {
+    Prism.highlightElement($outputBody);
+  };
+}
+module.exports = exports['default'];
+
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/components/output.js","/components")
+},{"buffer":1,"oMfpAn":4}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 
 /**
@@ -1711,45 +1803,21 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var filtersData = {
-  presets: ['#fff', '#2b2a2f', '#e45353', '#58cb6b', 'transparent'],
-  opened: false,
-  current: 'red'
+var _data = {
+  presets: ['#fff', '#2b2a2f', '#e45353', '#58cb6b', 'transparent']
 };
 
-exports['default'] = Vue.extend({
+exports['default'] = {
   data: function data() {
-    return filtersData;
+    return _data;
   },
   template: '#picker',
-  props: ['color'],
-  methods: {
-    open: function open() {
-      this.opened = !this.opened;
-    },
-    close: function close() {
-      this.opened = false;
-    }
-  },
-  ready: initEvents
-});
-
-function initEvents() {
-
-  /**
-   * Close colorpicker popup
-   * on document click
-   */
-  var self = this;
-  $(document).on('click', function (e) {
-    if ($(e.target).closest('.picker').length) return;
-    self.close();
-  });
-}
+  props: ['color']
+};
 module.exports = exports['default'];
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/components/picker.js","/components")
-},{"buffer":1,"oMfpAn":4}],9:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -1763,70 +1831,57 @@ var _helpers = require('../helpers');
  * Sources VM
  */
 
-var sourcesData = {
+var _data = {
   current: 0,
-  color: 'white',
-  preview: {
+  viewport: {
     width: 0,
     height: 0
   },
   items: [{
-    url: 'img/doge.png',
-    repeat: 'no-repeat',
+    fakeUrl: 'img/doge.png',
     x: 50,
     y: 50,
+    repeat: 'no-repeat',
     isCenter: true,
-    size: 62,
-    imgSize: {
+    size: 540,
+    hidden: false,
+    isPreset: true,
+    img: {
+      url: 'img/doge.png',
       width: 0,
       height: 0,
       aspectRatio: 1
-    },
-    hidden: false
+    }
   }, {
-    url: 'img/nightsky.jpg',
-    repeat: 'no-repeat',
+    fakeUrl: 'img/nightsky.png',
     x: 50,
     y: 50,
+    repeat: 'no-repeat',
     isCenter: true,
-    size: 165,
-    imgSize: {
+    size: 1665,
+    hidden: false,
+    isPreset: true,
+    img: {
+      url: 'img/nightsky.jpg',
       width: 0,
       height: 0,
       aspectRatio: 1
-    },
-    hidden: false
+    }
   }]
 };
 
-exports['default'] = Vue.extend({
+exports['default'] = {
   data: function data() {
-    return sourcesData;
+    return _data;
   },
+  name: 'sources',
   template: '#sources',
   props: ['str'],
+
   methods: {
 
     /**
-     * Helpers
-     */
-    setCentredCoordinates: function setCentredCoordinates(item) {
-      if (!item.isCenter) return;
-
-      if (item.size == 'auto') {
-        item.x = (this.preview.width - item.imgSize.width) / 2;
-        item.y = (this.preview.height - item.imgSize.height) / 2;
-      } else {
-        item.x = (this.preview.width - this.preview.width * item.size / 100) / 2;
-        item.y = (this.preview.height - this.preview.width * item.size / item.imgSize.aspectRatio / 100) / 2;
-      }
-
-      item.x = Math.round(item.x);
-      item.y = Math.round(item.y);
-    },
-
-    /**
-     * Switch current background (which we can drag on canvas)
+     * Switch current background to control
      */
     switchSelected: function switchSelected(index) {
 
@@ -1835,27 +1890,26 @@ exports['default'] = Vue.extend({
         return;
       }
 
-      var nextInd = (0, _helpers.nextArrayIndex)(this.items, this.current);
+      var nextInd = (0, _helpers.travelArray)(this.items, this.current);
 
-      if (this.items[nextInd].hidden) return;else this.current = nextInd;
+      if (this.items[nextInd].hidden) nextInd = (0, _helpers.travelArray)(this.items, nextInd);
+
+      this.current = nextInd;
     },
 
-    /**
-     * Image repeat handler
-     */
-    repeatClick: function repeatClick(item) {
+    changeRepeat: function changeRepeat(item) {
       item.repeat = item.repeat == 'repeat' ? 'no-repeat' : 'repeat';
     },
 
-    /**
-     * Image position handlers
-     */
-    positionClick: function positionClick(item) {
-      item.isCenter = true;
-      this.centerBackground(item);
-    },
-    positionDrag: function positionDrag(e, item) {
+    changePosition: function changePosition(e, item) {
       item = item || this.items[this.current];
+
+      if (e.type == 'click') {
+        item.isCenter = true;
+        this.centerImage(item);
+        return;
+      }
+
       var incX = item.x;
       var incY = item.y;
       var originX = e.pageX;
@@ -1869,44 +1923,42 @@ exports['default'] = Vue.extend({
       });
     },
 
-    /**
-     * Image size handlers
-     */
-    sizeClick: function sizeClick(item) {
-      item.size = 'auto';
-      this.setCentredCoordinates(item);
-    },
-    sizeDrag: function sizeDrag(item, e) {
-      var _this = this;
+    changeSize: function changeSize(e) {
+      var item = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
-      // calculate image width in percents from its original size
-      var startingPoint = _helpers.range.lower(Math.round(item.imgSize.width * 100 / this.preview.width), 200);
-      // set starting drag point
-      var curr = item.size == 'auto' ? startingPoint : item.size;
+      if (e.type == 'click') {
 
-      // size can be changed by drag or by mouse wheel
-      if (e.type == 'mousewheel') {
-        item.size = _helpers.range.between(e.deltaY < 0 ? curr + 5 : curr - 5, 0, 200);
-        this.setCentredCoordinates(item);
-      } else {
-        (function () {
-          var originY = e.clientY;
+        var difference = item.img.width - item.size;
+        item.size = 'auto';
+        item.x -= difference / 2;
+        item.y -= difference / item.img.aspectRatio / 2;
+      } else if (e.type == 'wheel') {
 
-          _helpers.helpers.drag(function (evt) {
-            item.size = _helpers.range.between(curr - (evt.pageY - originY), 0, 200);
-            _this.setCentredCoordinates(item);
-          });
-        })();
+        item = this.items[this.current];
+        var MIN_SIZE = 3;
+
+        // set starting point
+        var curr = item.size == 'auto' ? item.img.width : item.size;
+
+        // adjust zoom speed
+        var incrementStep = curr < this.viewport.width ? 18 : 8;
+
+        var increment = this.viewport.width / incrementStep;
+        increment *= e.deltaY < 0 ? 1 : -1;
+
+        if (curr + increment >= MIN_SIZE) {
+          item.size = curr + increment;
+
+          // zoom starting point is center,
+          // so also adjusting coordinates
+          item.x -= increment / 2;
+          item.y -= increment / item.img.aspectRatio / 2;
+        }
       }
+
+      if (item.isCenter) this.centerImage(item);
     },
 
-    sizeMouseWheel: function sizeMouseWheel(e) {
-      this.sizeDrag(this.items[this.current], e);
-    },
-
-    /**
-     * Hide background
-     */
     hide: function hide(index) {
       var item = this.items[index];
       if (item.hidden) {
@@ -1915,109 +1967,199 @@ exports['default'] = Vue.extend({
       }
 
       this.items.forEach(function (el) {
-        el.hidden = false;
+        return el.hidden = false;
       });
       this.items[index].hidden = true;
 
-      if (this.current == index) this.current = (0, _helpers.nextArrayIndex)(this.items, this.current);
+      if (this.current == index) this.current = (0, _helpers.travelArray)(this.items, this.current);
+    },
+
+    remove: function remove(index) {
+      this.items.splice(index, 1);
+    },
+
+    addNew: function addNew() {
+      var _this = this;
+
+      this.items.push({
+        fakeUrl: '',
+        x: 0,
+        y: 0,
+        repeat: 'no-repeat',
+        isCenter: true,
+        size: 'auto',
+        hidden: false,
+        isPreset: false,
+        img: {
+          url: '',
+          width: 0,
+          height: 0,
+          aspectRatio: 1
+        }
+      });
+
+      this.current = this.items.length - 1;
+
+      this.$nextTick(function () {
+        $('.source__input-area').eq(_this.current).find('input').focus();
+      });
+    },
+
+    move: function move(from, to) {
+      var item = this.items.splice(from, 1)[0];
+      this.items.splice(to, 0, item);
+      this.current === from && (this.current = to);
     },
 
     /**
-     * Image dimensions and positioning handlers
+     * Image centering logic
      */
-    centerBackground: function centerBackground(items, onResize) {
-      var _this2 = this;
+    centerImage: function centerImage(item) {
+      if (!item.isCenter) return;
 
-      if (!Array.isArray(items)) items = [items];
+      var currentItemSize = item.size == 'auto' ? item.img.width : item.size;
 
-      items.forEach(function (item) {
-        if (onResize && !item.isCenter) return;
+      item.x = Math.round((this.viewport.width - currentItemSize) / 2);
+      item.y = Math.round((this.viewport.height - currentItemSize / item.img.aspectRatio) / 2);
+    },
+
+    /**
+     * Extract image dimensions
+     * and set item defaults
+     */
+    setImageProps: function setImageProps(item, image) {
+      item.img.width = image.width;
+      item.img.height = image.height;
+      item.img.aspectRatio = image.width / image.height;
+
+      // not set defaults for preset (default) images
+      if (!item.isPreset) {
         item.isCenter = true;
-        _this2.setCentredCoordinates(item);
-      });
-    },
-    getBackgroundSize: function getBackgroundSize(items) {
-      var self = this;
-      if (!Array.isArray(items)) items = [items];
+        item.size = 'auto';
+        this.current = this.items.indexOf(item);
+      }
+      item.isPreset = false;
 
-      items.forEach(function (item) {
-        var img = new Image();
-
-        img.onload = function () {
-          item.imgSize.width = this.width;
-          item.imgSize.height = this.height;
-          item.imgSize.aspectRatio = this.width / this.height;
-          self.centerBackground(item);
-        };
-
-        img.src = item.url;
-      });
+      this.centerImage(item);
     },
 
     /**
-     * Handle local image uploading
+     * Handle input url field
+     * or image file uploading
      */
-    readURL: function readURL(e) {
-      var item = e.targetVM;
-      var input = e.target;
+    processImageURL: function processImageURL(e, item) {
+      var value = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
+
       var self = this;
+      var input = null;
 
-      if (input.files && input.files[0]) {
+      if (e) {
+        input = e.target;
+        value = input.value;
+      }
+
+      if (value === item.fakeUrl && !item.isPreset) return;
+
+      if (input && input.files) {
+
         var reader = new FileReader();
-
         reader.onload = function (e) {
-          item.url = e.target.result;
-          self.getBackgroundSize(item);
+          (0, _helpers.loadImage)(e.target.result, function () {
+            self.setImageProps(item, this);
+            item.fakeUrl = value.replace(/^.*fakepath[\/\\]?/, '');
+            item.img.url = e.target.result;
+          });
         };
-
         reader.readAsDataURL(input.files[0]);
+      } else {
+
+        (0, _helpers.loadImage)(value, function () {
+          self.setImageProps(item, this);
+          item.fakeUrl = value;
+          item.img.url = this.src;
+        });
       }
     },
 
-    /**
-     * Calculate background styles for main VM
-     */
     compileStyle: function compileStyle() {
       var s = '';
+      var curr = undefined,
+          x = undefined,
+          y = undefined,
+          size = undefined;
       for (var i = 0, len = this.items.length; i < len; i++) {
-        var curr = this.items[i];
+        curr = this.items[i];
         if (curr.hidden) continue;
-        var x = curr.isCenter ? 'center' : curr.x + 'px';
-        var y = curr.isCenter ? 'center' : curr.y + 'px';
-        var size = curr.size == 'auto' ? 'auto' : curr.size + '%';
-        s += 'url(\'' + curr.url + '\')\n           ' + curr.repeat + '\n           ' + x + '\n           ' + y + ' / ' + size;
+
+        x = curr.isCenter ? 'center' : curr.x + 'px';
+        y = curr.isCenter ? 'center' : curr.y + 'px';
+        size = curr.size === 'auto' ? 'auto' : curr.size + 'px';
+
+        s += 'url(\'' + curr.img.url + '\') ' + curr.repeat + ' ' + x + ' ' + y + ' / ' + size;
+
         if (i !== len - 1) s += ', ';
       }
       this.str = 'background: ' + s + ';';
     }
   },
+
   watch: {
     '$data': {
       deep: true,
       handler: function handler() {
         this.compileStyle();
       }
+    },
+    'items': function items() {
+      if (this.current > this.items.length - 1) this.current = this.items.length - 1;
     }
   },
+
   ready: function ready() {
-    var _this3 = this;
+    var _this2 = this;
 
-    var $preview = $('.preview');
-    this.getBackgroundSize(this.items);
+    // process initial presets styles
+    this.items.forEach(function (el) {
+      _this2.processImageURL(null, el, el.img.url);
+    });
 
-    $(window).on('resize', function () {
-      _this3.preview.width = $preview.outerWidth();
-      _this3.preview.height = $preview.outerHeight();
-      _this3.centerBackground(_this3.items, true);
-    }).trigger('resize');
-
-    this.compileStyle();
+    postBind.call(this);
   }
-});
+};
+
+function postBind() {
+  var _this3 = this;
+
+  var $viewport = $('.preview');
+  var self = this;
+
+  $(window).on('resize', function () {
+    _this3.viewport.width = $viewport.width();
+    _this3.viewport.height = $viewport.height();
+
+    _this3.items.forEach(function (item) {
+      if (item.isCenter) _this3.centerImage(item);
+    });
+  }).trigger('resize');
+
+  /**
+   * Draggable panes
+   */
+  var container = $('.source')[0];
+  Sortable.create(container, {
+    animation: 150,
+    scroll: false,
+    handle: '.source__drag-handler',
+    draggable: '.source__item',
+    onUpdate: function onUpdate(e) {
+      self.move(e.oldIndex, e.newIndex);
+    }
+  });
+}
 module.exports = exports['default'];
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/components/sources.js","/components")
-},{"../helpers":10,"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
+},{"../helpers":11,"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 
 /**
@@ -2029,27 +2171,53 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports.loadImage = loadImage;
+exports.travelArray = travelArray;
+var $win = $(window);
+var $dragOverlay = $('.drag-overlay');
+
 var helpers = {
-  toggleDragOverlay: function toggleDragOverlay(bool) {
-    $('.drag-overlay').toggle(bool);
+
+  toggleDragOverlay: function toggleDragOverlay(bool, vert) {
+    $dragOverlay.css('cursor', vert ? 'ns-resize' : 'move').toggle(bool);
   },
+
   drag: function drag(func) {
-    $(window).on('mousemove.filt', function () {
-      helpers.toggleDragOverlay(true);
+    var isVertical = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+    $win.on('mousemove.fb', function () {
+      helpers.toggleDragOverlay(true, isVertical);
       func.apply(this, arguments);
     });
   }
+
 };
+
+exports.helpers = helpers;
+/**
+ * Load image with callback
+ */
+
+function loadImage(src, cb) {
+  var img = new Image();
+  img.onload = cb;
+  img.src = src;
+}
+
+;
 
 /**
  * Cycle through array indexes
  */
-var nextArrayIndex = function nextArrayIndex(arr, ind) {
+
+function travelArray(arr, ind) {
   return ind == arr.length - 1 ? 0 : ind + 1;
-};
+}
+
+;
 
 /**
- * Set min/max boundaries for number
+ * Set min/max number range
  */
 var range = {
   bigger: function bigger(val, upper) {
@@ -2062,13 +2230,10 @@ var range = {
     return Math.max(Math.min(val, max), min);
   }
 };
-
-exports.helpers = helpers;
-exports.nextArrayIndex = nextArrayIndex;
 exports.range = range;
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/helpers.js","/")
-},{"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],12:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 
 /**
@@ -2080,27 +2245,53 @@ exports.range = range;
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports.loadImage = loadImage;
+exports.travelArray = travelArray;
+var $win = $(window);
+var $dragOverlay = $('.drag-overlay');
+
 var helpers = {
-  toggleDragOverlay: function toggleDragOverlay(bool) {
-    $('.drag-overlay').toggle(bool);
+
+  toggleDragOverlay: function toggleDragOverlay(bool, vert) {
+    $dragOverlay.css('cursor', vert ? 'ns-resize' : 'move').toggle(bool);
   },
+
   drag: function drag(func) {
-    $(window).on('mousemove.filt', function () {
-      helpers.toggleDragOverlay(true);
+    var isVertical = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+    $win.on('mousemove.fb', function () {
+      helpers.toggleDragOverlay(true, isVertical);
       func.apply(this, arguments);
     });
   }
+
 };
+
+exports.helpers = helpers;
+/**
+ * Load image with callback
+ */
+
+function loadImage(src, cb) {
+  var img = new Image();
+  img.onload = cb;
+  img.src = src;
+}
+
+;
 
 /**
  * Cycle through array indexes
  */
-var nextArrayIndex = function nextArrayIndex(arr, ind) {
+
+function travelArray(arr, ind) {
   return ind == arr.length - 1 ? 0 : ind + 1;
-};
+}
+
+;
 
 /**
- * Set min/max boundaries for number
+ * Set min/max number range
  */
 var range = {
   bigger: function bigger(val, upper) {
@@ -2113,9 +2304,6 @@ var range = {
     return Math.max(Math.min(val, max), min);
   }
 };
-
-exports.helpers = helpers;
-exports.nextArrayIndex = nextArrayIndex;
 exports.range = range;
 
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/helpers.js","/")

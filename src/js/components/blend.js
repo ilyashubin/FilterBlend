@@ -2,7 +2,7 @@
  * Blend Mode VM
  */
 
-let blendData = {
+let data = {
   current: 6,
   values: [
     'normal', 'multiply', 'screen', 'overlay', 'darken', 'lighten',
@@ -11,28 +11,25 @@ let blendData = {
   ],
 };
 
-export default Vue.extend({
-  data() { return blendData; },
+export default {
+  data() { return data; },
   template: '#blend',
   props: ['str'],
+
   methods: {
 
-    /**
-     * Reset blend mode to 'normal'
-     */
     reset() {
       this.current = 0;
     },
 
-    /**
-     * Calculate blend styles for main VM
-     */
     compileStyle() {
       this.str = `background-blend-mode: ${this.values[this.current]}; `;
     },
   },
+
   watch: {
-    'current'() {this.compileStyle();}
+    'current'() {this.compileStyle()}
   },
-  ready() {this.compileStyle();},
-});
+
+  ready() {this.compileStyle()},
+};

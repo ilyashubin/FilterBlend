@@ -1,92 +1,132 @@
 .source
-  color lighten($text-sub, 60%)
+  color lighten($text-sub, 40%)
   font-size .95em
   margin-bottom 10px
   &__inner
     padding 10px 15px
   &__item
-    display flex
-    align-items center
-    &:hover
-      color lighten($text-sub, 40%)
+    padding 14px 35px 14px 30px
+    margin 0 -10px
+    border-bottom 1px dashed rgba(#000, 10%)
+    background #fff
+    &:first-child
+      padding-top 5px
+    &:last-child
+      border-bottom none
+      padding-bottom 5px
     &.is-hidden
-      .part:not(.-hide)
+      .source__input-are
       .source__selected
-      .source__input
-      .source__upload
+      .source__buttons *:not(.-hide)
       input
         pointer-events none
-        color #eee !important
-      .part.-hide
-        background-color #e88d93 !important
-        color #fff
+        color #eee
+      .source__controls-item
+        pointer-events none
+        opacity .5
+      .source__buttons-item.-hide i
+        color orange
 
-  &__cell
-    &.-hide
-      font-size 1.1em
-      line-height 1
-      flex 1
-      text-align right
-    &.-input
-      position relative
-      margin-right 4px
+  &__top
+  &__bottom
+    display flex
+    align-items center
+
+  &__top
+    position relative
+    margin-bottom 7px
+    margin-left -30px
+    background #fff
+    height 32px
 
   &__selected
-    display inline-block
-    width 14px
-    height 14px
-    vertical-align middle
-    margin-right 10px
-    border-radius 100%
+  &__drag-handler
+    height 100%
+    line-height 32px
+    transition .15s
+
+  &__selected
+    text-align center
+    width 30px
     background #eee
-    transition background .2s
     cursor pointer
+    &:hover
+      color $base-sub
     .is-selected &
       background $base-sub
-  &__input
-    display inline-block
-    padding .36em 0
-    input
-      color $text-sub
-      padding-right 2.3em
-  &__upload
+      color #fff
+
+  &__drag-handler
     position absolute
-    top .36em
-    right 0
-    width 26px
-    line-height 30px
-    font-size 1.1em
+    top 0
+    left 100%
     text-align center
-    cursor pointer
-    vertical-align middle
-    transition .2s
+    width 25px
+    cursor row-resize
+    margin-left 4px
+    color #aaa
     &:hover
-      color $base-sub
-    input
-      opacity 0
-      visibility hidden
-  .part
-    display inline-block
-    padding .32em .6em
-    margin 0 .1em
-    cursor pointer
-    border-radius .28em
-    transition background .2s, color .2s
-    &:hover
-      color $base-sub
-    &.-hide
-      &:hover
-        background $base-sub
-        color #fff
-    &.-url
-      &:hover
-        background transparent
-        color inherit
+      color #999
+
+  &__input
+    display flex
+    align-items center
+    flex 1
+    height 100%
+    border 1px solid #eee
+    border-left none
+    transition border-color .15s
+    .is-selected &
+      border-color $base-sub
+    &-area
+      flex 1
       input
-        margin 0 .2em
-    &.-position
-      cursor move
-      span:first-child
-        margin-right 5px
-    &.-size
-      cursor ns-resize
+        width 100%
+        color $text-sub
+        border-radius 0
+        border none
+
+  &__buttons
+    display flex
+    height 100%
+    color $text-sub
+    &-item
+      width 30px
+      height 100%
+      overflow hidden
+      line-height 32px
+      text-align center
+      transition .2s
+      cursor pointer
+      &.is-hidden
+        opacity .5
+        pointer-events none
+      &:hover
+        color $base-sub
+      input
+        opacity 0
+        visibility hidden
+
+  &__controls
+    display flex
+    width 100%
+    align-items center
+    &-item
+      padding 4px 10px
+      text-align center
+      flex 1
+      color lighten($text-main, 55%)
+      background #f5f5f5
+      cursor pointer
+      transition .15s
+      margin-right 8px
+      border-radius 3px
+      box-shadow 0 1px 2px rgba(0,0,0,0.125)
+      &:hover
+        background #eee
+      &:last-child
+        margin-right 0
+      &.is-active
+        background lighten($base-sub, 85%)
+        color $base-sub
+        box-shadow 0 1px 2px lighten($base-sub, 55%)

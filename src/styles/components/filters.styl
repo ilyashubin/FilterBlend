@@ -1,6 +1,5 @@
 .filters
   columns 2
-  // no styles for filters yet
   &__item
     display inline-block
     color #7f8c8d
@@ -9,11 +8,11 @@
     cursor pointer
     margin-bottom .8em
     transition .15s
+    user-select none
+    transform translateZ(0)
+    white-space nowrap
     &.is-active
       color $base-sub
-      .options__filters-value
-        background $base-sub
-        color #fff
 
   &__value
     display inline-block
@@ -24,3 +23,5 @@
     background #eee
     border-radius 3px
     cursor ns-resize
+    &:hover
+      background darken(#eee, 6%)

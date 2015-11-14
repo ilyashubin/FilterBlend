@@ -1,103 +1,153 @@
 mixin templates()
   .templates
+    
+    //- output
+    template#output
+      .sec__heading
+        .sec__label Output
+      .sec__inner
+        .output
+          .output__inner
+            pre.output__body
+              code.language-css(v-html='str')
+        
     //- picker
     template#picker
       .picker
-        .picker__item(v-class='is-open: opened')
-          .picker__current(
-            style='background: {{color == "transparent" ? "" : color}};'
-            v-on='click: open'
+        .picker__body
+          label.picker__current(
+            for='pick'
             title='choose background color'
+            v-bind:style='{ "background": color == "transparent" ? "" : color }'
           )
-          .picker__body
-            .picker__input
-              input(
-                type='text'
+          .picker__input
+            input.inp-text(
+              type='text'
+              v-model='color'
+            )
+            label.picker__call.fa.fa-eyedropper
+              input.inp-color(
+                id='pick'
+                type='color'
                 v-model='color'
-              ).inp-text
-              label.picker__call.fa.fa-eyedropper
-                input(type='color' v-model='color').inp-color
-            .picker__variants
-              .picker__variants-item(
-                v-repeat='presets'
-                style='background: {{$value == "transparent" ? "" : $value}};'
-                v-on='click: color = $value'
               )
+          .picker__variants
+            .picker__variants-item(
+              v-for='preset in presets'
+              v-bind:style='{ "background": preset == "transparent" ? "" : preset }'
+              @click='color = preset'
+            )
               
     //- filters
     template#filters
       .sec__heading
-        .sec__label filters
-        .sec__btn(v-on='click: reset') reset
+        .sec__label Filters
+        .sec__btn(@click='reset') reset
       .sec__inner
         .filters
-          div(v-repeat='filters')
-            label.filters__item(v-class='is-active: enabled')
+          div(v-for='filter in filters')
+            label.filters__item(v-bind:class='{ "is-active": filter.enabled }')
               .check
-                input(type='checkbox' v-model='enabled')
+                input(
+                  type='checkbox'
+                  v-model='filter.enabled'
+                )
                 span.check__display
+                span.check__background
               span.filters__label
-                span.filters__property {{name}}
+                span.filters__property {{ filter.name }}
                 span.filters__value(
-                  v-on='mousedown: drag(this, $event)'
                   title='drag up or down to change'
-                ) {{value.current}}{{value.measure}}
+                  @mousedown='change($event, filter)'
+                ) {{ filter.value.current + filter.value.measure }}
+                
     //- blends
     template#blend
       .sec__heading
-        .sec__label blend-mode
-        .sec__btn(v-on='click: reset') reset
+        .sec__label Blend-mode
+        .sec__btn(@click='reset') reset
       .sec__inner
         .blend
           .blend__item(
-            v-repeat='values'
-            v-on='click: current = $index'
-            v-class='is-active: current == $index'
-          ) {{$value}}
+            v-for='value in values'
+            @click='current = $index'
+            v-bind:class='{ "is-active": current == $index }'
+          ) {{ value }}
+          
     //- sources
     template#sources
-      .source.sec
-        .source__inner
+      .sec__heading
+        .sec__label Backgrounds
+        .sec__btn(@click='addNew') add new
+      .sec__inner
+        .source
           .source__item(
-            v-repeat='items'
-            v-class='is-selected: current == $index, is-hidden: hidden'
+            v-for='item in items'
+            v-bind:class='{ "is-selected": current == $index, "is-hidden": item.hidden }'
           )
-            .source__cell
-              .source__selected(
-                v-on='click: switchSelected($index)'
-                title='switch active background'
-              )
-            .source__cell.-input
-              label.source__input
-                input(
-                  type='text'
-                  v-model='url'
-                  v-on='keyup: getBackgroundSize(this)'
-                )
-              label.source__upload(title='choose local file')
-                i.fa.fa-file-image-o
-                input(type='file' v-on='change: readURL').source__upload
-            .source__cell
-              span.part.-repeat(
-                v-on='click: repeatClick(this)'
-                title='Background repeat'
-              ) {{repeat}}
+            .source__top
               
-            .source__cell
-              span.part.-position(
-                v-on='click: positionClick(this), mousedown: positionDrag($event, this)'
-                title='Background position (click to toggle or drag)'
-              )
-                span {{isCenter ? 'center' : x}}{{isCenter ? '' : 'px'}}
-                span {{isCenter ? 'center' : y}}{{isCenter ? '' : 'px'}}
-            .source__cell
-              span.part.-size(
-                v-on='click: sizeClick(this), mousedown: sizeDrag(this, $event)'
-                title='Background size (click to toggle or drag)'
-              ) {{size == 'auto' ? 'auto' : size + '%'}}
-            .source__cell.-hide
-              span.part.-hide(
-                v-on='click: hide($index)'
-                v-show='items.length > 1'
-                title='Hide background'
-              ): i.fa.fa-eye-slash
+              .source__drag-handler(
+                title='drag to reorder'
+              ).fa.fa-bars
+              
+              .source__selected(
+                title='switch active background'
+                @click='switchSelected($index)'
+              ).fa.fa-file-image-o
+                
+              .source__input
+                label.source__input-area
+                  input(
+                    type='text'
+                    v-bind:value='item.fakeUrl'
+                    placeholder='enter background url'
+                    @keyup='processImageURL($event, item)'
+                  )
+                  
+                .source__buttons
+                  
+                  label.source__buttons-item.-upload(
+                    title='choose local file'
+                  )
+                    i.fa.fa-upload
+                    input(
+                      type='file'
+                      @change='processImageURL($event, item)'
+                    )
+                    
+                  .source__buttons-item.-hide(
+                    title='hide'
+                    v-bind:class='{ "is-hidden": items.length < 2 }'
+                    @click='hide($index)'
+                  )
+                    i.fa.fa-eye-slash
+                    
+                  .source__buttons-item(
+                    title='remove'
+                    v-bind:class='{ "is-hidden": items.length < 2 }'
+                    @click='remove($index)'
+                  )
+                    i.fa.fa-trash-o
+                      
+                      
+            .source__bottom
+              .source__controls
+                
+                .source__controls-item.-repeat(
+                  title='Background repeat'
+                  v-bind:class='{ "is-active": item.repeat == "repeat" }'
+                  @click='changeRepeat(item)'
+                ) repeat
+                
+                .source__controls-item.-position(
+                  title='Background position'
+                  v-bind:class='{ "is-active": item.isCenter }'
+                  @click='changePosition($event, item)'
+                ) center
+                
+                .source__controls-item.-size(
+                  title='Background size'
+                  v-bind:class='{ "is-active": item.size == "auto" }'
+                  @click='changeSize($event, item)'
+                ) auto

@@ -1,24 +1,34 @@
 *
   box-sizing border-box
+  outline none !important
 
 html
-  background #f7f7f7
   min-width 880px
   background-size 170px
   color $text-main
   font 14px/1.4 'Helvetica', Arial, sans-serif
 
+body
+  background darken(#f7f7f7, 5%)
+
 a
   text-decoration none
   transition color .15s, background-color .15s, opacity .15s
-  color #ff5256
+  color $base-sub
   &:hover
     text-decoration none
-    color #d55154
+    color darken($base-sub, 22%)
+
+code
+  display inline-block
+  background #f6f6f6
+  padding .08em .35em
+  color $text-sub
+  margin .15em 0
 
 ::selection
-  color #fff
-  background $base-sub
+  color #fff !important
+  background $base-sub !important
 
 // form elements
 button
@@ -34,22 +44,17 @@ input[type='search']
   background transparent
   box inline-block
   border none
-  transition background .2s, color .2s
+  transition background .15s, color .15s
   vertical-align middle
   border 1px solid #eee
   padding .45em .8em
   border-radius .28em
+  box-shadow none
   &:focus
     border-color $base-sub
 
 textarea
   resize vertical
-
-input
-textarea
-button
-  &:focus
-    outline none
 
 img
   height auto

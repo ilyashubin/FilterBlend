@@ -1,0 +1,29 @@
+.hint
+  position absolute
+  top 0
+  left 0
+  width 100%
+  z-index 10
+  margin 11px
+  &__body
+    position absolute
+    top 0
+    left 0
+    padding 13px 22px 10px 18px
+    box-shadow 0 2px 10px rgba(#000, 30%)
+    transition transform .3s, opacity .25s, visibility .25s
+    opacity 0
+    visibility hidden
+    transform translateY(-20%)
+    &.is-visible
+      transform translateY(0)
+      opacity 1
+      visibility visible
+      transition-delay 1s
+    li
+      margin-bottom 5px
+    .fa
+      margin-right 8px
+      display inline-block
+      width 12px
+      text-align center

@@ -4,7 +4,7 @@ import { helpers, range } from '../helpers';
  * Filters VM
  */
 
-let filtersData = {
+let data = {
   filters: [
     {
       name: 'saturate',
@@ -109,61 +109,57 @@ let filtersData = {
   ],
 };
 
-export default Vue.extend({
-  data() { return filtersData; },
+export default {
+  data() { return data; },
   template: '#filters',
   props: ['str'],
+
   methods: {
 
-    /**
-     * Drag filter value with certain step
-     */
-    drag(item, e) {
+    change(e, item) {
       let curr = item.value.current;
-      let originY = e.clientY;
+      let originY = e.pageY;
 
       helpers.drag(function(evt) {
         item.enabled = true;
 
         item.value.current = Math.round((curr - (evt.pageY - originY) *
           item.value.step) * 10) / 10;
-        // value should be in min/max range
+
         item.value.current = range.between(item.value.current, item.value.min, item.value.max);
 
         if (item.value.step % 1 !== 0)
           item.value.current = item.value.current.toFixed(1);
-      });
+      }, true);
     },
 
-    /**
-     * Reset all filters
-     */
     reset() {
       this.filters.forEach((el)=> el.enabled = false );
     },
 
-    /**
-     * Calculate filters styles for main VM
-     */
     compileStyle() {
       let s = '';
       let enabled = 0;
+
       for (let i = 0, len = this.filters.length; i < len; i++) {
         let curr = this.filters[i];
         if (!curr.enabled) continue;
         enabled++;
         s += `${curr.name}(${curr.value.current}${curr.value.measure}) `;
       }
-      if (!enabled) s += 'none';
-      this.str = `-webkit-filter: ${s};`;
-      this.str += `filter: ${s};`;
+      s = s.slice(0, -1);
+      if (!enabled) s = 'none';
+
+      this.str = `filter: ${s};`;
     },
   },
+
   watch: {
     'filters': {
       deep: true,
-      handler() {this.compileStyle();},
+      handler() {this.compileStyle()},
     }
   },
-  ready() {this.compileStyle();},
-});
+
+  ready() {this.compileStyle()},
+};

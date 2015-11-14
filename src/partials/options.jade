@@ -1,13 +1,17 @@
 mixin options()
   .options.nano
     .options__inner.nano-content
-      .options__section.sec.-blend
-        filterblend-blend(v-ref='blend' str='{{@ blendStr}}')
-      .options__section.sec.-filters
-        filterblend-filters(v-ref='filters' str='{{@ filtersStr}}')
-      .options__section.sec.-manual
-        .sec__heading
-          .sec__label How to use
-        +howto()
+      .options__section.sec
+        sources(v-ref:sources :str.sync='backgroundStr')
+      .options__section.sec
+        picker(:color.sync='color')
+      .options__section.sec
+        blend(:str.sync='blendStr')
+      .options__section.sec
+        filters(:str.sync='filterStr')
+      .options__section.sec.-spacing-small
+        output(:str='outputStr')
+      .options__section.sec.-dimm.-spacing-small
+        +about
         
         

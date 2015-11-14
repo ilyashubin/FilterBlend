@@ -3,11 +3,11 @@ include ../partials/*.jade
 mixin scripts()
   <!-- build:js js/app.concat.js -->
   
-  //- Bower js components
-  <!-- bower:js -->
-  <!-- endbower -->
-
-  //- Scripts
+  script(src="vendor/jquery/jquery.min.js")
+  script(src="vendor/vue/vue.min.js")
+  script(src="vendor/nanoscroller/jquery.nanoscroller.min.js")
+  script(src="vendor/Sortable/Sortable.js")
+  script(src="vendor/prism/prism.js")
   script(src="js/app.js")
     
   <!-- endbuild -->
@@ -15,12 +15,19 @@ mixin scripts()
 mixin styles()
   <!-- build:css css/main.concat.css -->
   
-  //- Bower css components
-  <!-- bower:css -->
-  <!-- endbower -->
-
   //- Styles
-  link(rel="stylesheet", href="css/main.css")
+  link(
+    rel="stylesheet"
+    href="vendor/nanoscroller/nanoscroller.css")
+  link(
+    rel="stylesheet"
+    href="vendor/font-awesome/css/font-awesome.min.css")
+  link(
+    rel="stylesheet"
+    href="vendor/prism/prism.css")
+  link(
+    rel="stylesheet"
+    href="css/main.css")
     
   <!-- endbuild -->
 
@@ -29,17 +36,20 @@ mixin styles()
 doctype html
 html
   head
-    block title
-      title Filter Blend - CSS blend modes and filters playground
-
     meta(charset='utf-8')
-    meta(http-equiv="X-UA-Compatible", content="IE=edge")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      
+    title Filter Blend - CSS blend modes and filters playground
+    meta(name='description' content='FilterBlend is a playground for the new CSS background-blend-mode and filter properties.')
+      
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=1100, initial-scale=1.0")
     link(rel="icon" type="image/png"  href="/favicon.png" sizes="32x32")
       
     +styles
 
   body
+    .drag-overlay
+        
     .github-badge
       a(
         href="https://github.com/ilyashubin/FilterBlend"
@@ -51,15 +61,14 @@ html
           alt="Fork me on GitHub"
           data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"
         )
+        
     +templates
-    .drag-overlay
+    
     .container
-      .container__header
-        +header
-      .container__app
+      .container__app#app
         .container__main
           .container__main-inner
-            +source
+            +header
             +preview
         .container__options
           +options

@@ -3,29 +3,44 @@
  * Helpers
  */
 
-let helpers = {
-  toggleDragOverlay: function(bool) {
-    $('.drag-overlay').toggle(bool);
+let $win = $(window);
+let $dragOverlay = $('.drag-overlay');
+
+export let helpers = {
+
+  toggleDragOverlay(bool, vert) {
+    $dragOverlay.css('cursor', vert ? 'ns-resize' : 'move').toggle(bool);
   },
-  drag: function(func) {
-    $(window).on('mousemove.filt', function() {
-      helpers.toggleDragOverlay(true);
+
+  drag(func, isVertical = false) {
+    $win.on('mousemove.fb', function() {
+      helpers.toggleDragOverlay(true, isVertical);
       func.apply(this, arguments);
     });
   },
+
+};
+
+/**
+ * Load image with callback
+ */
+export function loadImage(src, cb) {
+  let img = new Image();
+  img.onload = cb;
+  img.src = src;
 };
 
 /**
  * Cycle through array indexes
  */
-let nextArrayIndex = function(arr, ind) {
+export function travelArray(arr, ind) {
   return ind == arr.length - 1 ? 0 : ind + 1;
 };
 
 /**
- * Set min/max boundaries for number
+ * Set min/max number range
  */
-let range = {
+export let range = {
   bigger(val, upper) {
     return Math.max(val, upper);
   },
@@ -36,5 +51,3 @@ let range = {
     return Math.max(Math.min(val, max), min);
   },
 };
-
-export { helpers, nextArrayIndex, range };

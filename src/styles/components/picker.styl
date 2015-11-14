@@ -1,65 +1,38 @@
 .picker
-  &__item
-    position relative
-    width 35px
-    margin 8px 8px 0 auto
-    z-index 10
-    cursor default
-    padding-left 10px
+  padding 5px 0
+  margin -3px 0
   &__current
-    height 25px
-    cursor pointer
+    width 28px
+    height 28px
     border-radius 3px
-    box-shadow 0 0 0 1px rgba(#000, 8%), 0 0 10px rgba(#000, 20%)
-    transition background-color .2s, opacity .15s
+    transition background-color .2s
+    border 1px solid rgba(#000, 15%)
+    margin-right 10px
+    cursor pointer
     background url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX////f398AAADoq0bgAAAAAWJLR0QCZgt8ZAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABlJREFUGNNjYGAIDYVgyhjUMYWBcgOo6x4A6nkqgREgVhUAAAAASUVORK5CYII=')
     background-size 100%
-    &:hover
-      opacity .8
   &__body
-    position absolute
-    top 0
-    right 100%
-    text-align center
-    background #fff
-    padding 8px 10px
-    border-radius 5px
-    box-shadow 0 1px 5px rgba(#000, 20%)
-    opacity 0
-    visibility hidden
-    transition .2s
-    .is-open &
-      opacity 1
-      visibility visible
-    &:before
-      content ''
-      position absolute
-      top 8px
-      left 100%
-      width 10px
-      height 10px
-      margin-left -6px
-      border-top-right-radius 3px
-      background #fff
-      transform rotate(45deg)
-      box-shadow 4px -1px 4px -3px rgba(#000, 20%)
-  &__input
-    position relative
-    margin-bottom 10px
     display flex
     align-items center
+  &__input
+    position relative
+    margin-right 10px
     .inp-text
       background #fff
-      padding .4em 2.2em .4em .5em
+      padding .4em 2.2em .4em .7em
       color $text-sub
       width 130px
+    input
+      height 28px
+
   &__call
     position absolute
     top 0
     right 0
-    width 28px
-    height 29px
-    color darken($text-sub, 60%)
+    text-align center
+    width 30px
+    height 100%
+    color $text-sub
     font-size .8em
     line-height 30px
     overflow hidden
@@ -81,11 +54,12 @@
       display inline-block
       width 19px
       height 19px
-      margin 0 3px
+      margin 0 4.5px
       border-radius 50%
-      border 1px solid rgba(#000, 10%)
+      border 1px solid rgba(#000, 15%)
       cursor pointer
       transition .15s
+      vertical-align middle
       background url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX////f398AAADoq0bgAAAAAWJLR0QCZgt8ZAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABlJREFUGNNjYGAIDYVgyhjUMYWBcgOo6x4A6nkqgREgVhUAAAAASUVORK5CYII=')
       background-size 100%
       &:hover

@@ -9,8 +9,8 @@ rupture      = require 'rupture'
 
 # assets
 usemin       = require 'gulp-usemin'
+uglify       = require 'gulp-uglify'
 browserify   = require 'gulp-browserify'
-wiredep      = require('wiredep').stream
 
 # utils
 plumber      = require 'gulp-plumber'
@@ -30,12 +30,10 @@ processors = [
 
 # --- MARKUP ---
 
-gulp.task 'markup', -> runSequence 'jade', 'inject-js-deps'
-
 # Jade compilation
 
 gulp.task 'jade', ->
-  return gulp.src ['src/views/*.jade', '!src/views/_*.jade']
+  gulp.src ['src/views/*.jade', '!src/views/_*.jade']
     .pipe plumber
       errorHandler: notify.onError
         message: '<%= error.message %>',
@@ -71,7 +69,7 @@ gulp.task 'styles', ->
 # Browserify with Bebel transpiling
 
 gulp.task 'scripts', ->
-  return gulp.src 'src/js/app.js', { read: false }
+  gulp.src 'src/js/app.js', { read: false }
     .pipe plumber
       errorHandler: notify.onError
         message: '<%= error.message %>',
@@ -83,13 +81,13 @@ gulp.task 'scripts', ->
       # debug: true
     .pipe gulp.dest 'dist/js'
 
-# Js wire dependencies injection
+# Compress js
 
-gulp.task 'inject-js-deps', ->
-  return gulp.src 'dist/*.html'
-    .pipe wiredep
-      directory: 'dist/components'
-    .pipe gulp.dest 'dist'
+gulp.task 'compress', ->
+  gulp.src 'dist/js/app.concat.js'
+    .pipe uglify
+      preserveComments: 'license'
+    .pipe gulp.dest 'dist/js'
 
 # Assets concat
 
@@ -117,9 +115,9 @@ gulp.task 'serve', ->
 # Default task
 
 gulp.task 'default', ->
-  runSequence 'serve', 'scripts', 'markup', 'styles'
+  runSequence 'serve', 'scripts', 'jade', 'styles'
 
   watch ['src/styles/**/*.styl'], -> runSequence 'styles'
-  watch ['src/views/*.jade', 'src/partials/*.jade', 'bower.json'], -> runSequence 'markup'
+  watch ['src/views/*.jade', 'src/partials/*.jade'], -> runSequence 'jade'
   watch ['src/js/**/*.js'], -> runSequence 'scripts'
   watch ['dist/*.html', 'dist/js/**/*.js'], browserSync.reload
