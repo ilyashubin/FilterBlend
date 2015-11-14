@@ -1,45 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Filter Blend - CSS blend modes and filters playground</title>
     <meta charset="utf-8">
+    <title>Filter Blend - CSS blend modes and filters playground</title>
+    <meta name="description" content="FilterBlend is a playground for the new CSS background-blend-mode and filter properties.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="favicon.png" sizes="32x32"><link rel="stylesheet" href="css/main.concat.css"/>
+    <meta name="viewport" content="width=1100, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32"><link rel="stylesheet" href="css/main.concat.css"/>
   </head>
   <body>
+    <div class="drag-overlay"></div>
     <div class="github-badge"><a href="https://github.com/ilyashubin/FilterBlend" target="_blank" style="position: absolute; top: 0; right: 0; border: 0;"><img src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a></div>
     <div class="templates">
+      <template id="output">
+        <div class="sec__heading">
+          <div class="sec__label">Output</div>
+        </div>
+        <div class="sec__inner">
+          <div class="output">
+            <div class="output__inner">
+              <pre class="output__body"><code v-html="str" class="language-css"></code></pre>
+            </div>
+          </div>
+        </div>
+      </template>
       <template id="picker">
         <div class="picker">
-          <div v-class="is-open: opened" class="picker__item">
-            <div style="background: {{color == &quot;transparent&quot; ? &quot;&quot; : color}};" v-on="click: open" title="choose background color" class="picker__current"></div>
-            <div class="picker__body">
-              <div class="picker__input">
-                <input type="text" v-model="color" class="inp-text"/>
-                <label class="picker__call fa fa-eyedropper">
-                  <input type="color" v-model="color" class="inp-color"/>
-                </label>
-              </div>
-              <div class="picker__variants">
-                <div v-repeat="presets" style="background: {{$value == &quot;transparent&quot; ? &quot;&quot; : $value}};" v-on="click: color = $value" class="picker__variants-item"></div>
-              </div>
+          <div class="picker__body">
+            <label for="pick" title="choose background color" v-bind:style="{ &quot;background&quot;: color == &quot;transparent&quot; ? &quot;&quot; : color }" class="picker__current"></label>
+            <div class="picker__input">
+              <input type="text" v-model="color" class="inp-text"/>
+              <label class="picker__call fa fa-eyedropper">
+                <input id="pick" type="color" v-model="color" class="inp-color"/>
+              </label>
+            </div>
+            <div class="picker__variants">
+              <div v-for="preset in presets" v-bind:style="{ &quot;background&quot;: preset == &quot;transparent&quot; ? &quot;&quot; : preset }" @click="color = preset" class="picker__variants-item"></div>
             </div>
           </div>
         </div>
       </template>
       <template id="filters">
         <div class="sec__heading">
-          <div class="sec__label">filters</div>
-          <div v-on="click: reset" class="sec__btn">reset</div>
+          <div class="sec__label">Filters</div>
+          <div @click="reset" class="sec__btn">reset</div>
         </div>
         <div class="sec__inner">
           <div class="filters">
-            <div v-repeat="filters">
-              <label v-class="is-active: enabled" class="filters__item">
+            <div v-for="filter in filters">
+              <label v-bind:class="{ &quot;is-active&quot;: filter.enabled }" class="filters__item">
                 <div class="check">
-                  <input type="checkbox" v-model="enabled"/><span class="check__display"></span>
-                </div><span class="filters__label"><span class="filters__property">{{name}}</span><span v-on="mousedown: drag(this, $event)" title="drag up or down to change" class="filters__value">{{value.current}}{{value.measure}}</span></span>
+                  <input type="checkbox" v-model="filter.enabled"/><span class="check__display"></span><span class="check__background"></span>
+                </div><span class="filters__label"><span class="filters__property">{{ filter.name }}</span><span title="drag up or down to change" @mousedown="change($event, filter)" class="filters__value">{{ filter.value.current + filter.value.measure }}</span></span>
               </label>
             </div>
           </div>
@@ -47,58 +59,80 @@
       </template>
       <template id="blend">
         <div class="sec__heading">
-          <div class="sec__label">blend-mode</div>
-          <div v-on="click: reset" class="sec__btn">reset</div>
+          <div class="sec__label">Blend-mode</div>
+          <div @click="reset" class="sec__btn">reset</div>
         </div>
         <div class="sec__inner">
           <div class="blend">
-            <div v-repeat="values" v-on="click: current = $index" v-class="is-active: current == $index" class="blend__item">{{$value}}</div>
+            <div v-for="value in values" @click="current = $index" v-bind:class="{ &quot;is-active&quot;: current == $index }" class="blend__item">{{ value }}</div>
           </div>
         </div>
       </template>
       <template id="sources">
-        <div class="source sec">
-          <div class="source__inner">
-            <div v-repeat="items" v-class="is-selected: current == $index, is-hidden: hidden" class="source__item">
-              <div class="source__cell">
-                <div v-on="click: switchSelected($index)" title="switch active background" class="source__selected"></div>
+        <div class="sec__heading">
+          <div class="sec__label">Backgrounds</div>
+          <div @click="addNew" class="sec__btn">add new</div>
+        </div>
+        <div class="sec__inner">
+          <div class="source">
+            <div v-for="item in items" v-bind:class="{ &quot;is-selected&quot;: current == $index, &quot;is-hidden&quot;: item.hidden }" class="source__item">
+              <div class="source__top">
+                <div title="drag to reorder" class="source__drag-handler fa fa-bars"></div>
+                <div title="switch active background" @click="switchSelected($index)" class="source__selected fa fa-file-image-o"></div>
+                <div class="source__input">
+                  <label class="source__input-area">
+                    <input type="text" v-bind:value="item.fakeUrl" placeholder="enter background url" @keyup="processImageURL($event, item)"/>
+                  </label>
+                  <div class="source__buttons">
+                    <label title="choose local file" class="source__buttons-item -upload"><i class="fa fa-upload"></i>
+                      <input type="file" @change="processImageURL($event, item)"/>
+                    </label>
+                    <div title="hide" v-bind:class="{ &quot;is-hidden&quot;: items.length &lt; 2 }" @click="hide($index)" class="source__buttons-item -hide"><i class="fa fa-eye-slash"></i></div>
+                    <div title="remove" v-bind:class="{ &quot;is-hidden&quot;: items.length &lt; 2 }" @click="remove($index)" class="source__buttons-item"><i class="fa fa-trash-o"></i></div>
+                  </div>
+                </div>
               </div>
-              <div class="source__cell -input">
-                <label class="source__input">
-                  <input type="text" v-model="url" v-on="keyup: getBackgroundSize(this)"/>
-                </label>
-                <label title="choose local file" class="source__upload"><i class="fa fa-file-image-o"></i>
-                  <input type="file" v-on="change: readURL" class="source__upload"/>
-                </label>
+              <div class="source__bottom">
+                <div class="source__controls">
+                  <div title="Background repeat" v-bind:class="{ &quot;is-active&quot;: item.repeat == &quot;repeat&quot; }" @click="changeRepeat(item)" class="source__controls-item -repeat">repeat</div>
+                  <div title="Background position" v-bind:class="{ &quot;is-active&quot;: item.isCenter }" @click="changePosition($event, item)" class="source__controls-item -position">center</div>
+                  <div title="Background size" v-bind:class="{ &quot;is-active&quot;: item.size == &quot;auto&quot; }" @click="changeSize($event, item)" class="source__controls-item -size">auto</div>
+                </div>
               </div>
-              <div class="source__cell"><span v-on="click: repeatClick(this)" title="Background repeat" class="part -repeat">{{repeat}}</span></div>
-              <div class="source__cell"><span v-on="click: positionClick(this), mousedown: positionDrag($event, this)" title="Background position (click to toggle or drag)" class="part -position"><span>{{isCenter ? 'center' : x}}{{isCenter ? '' : 'px'}}</span><span>{{isCenter ? 'center' : y}}{{isCenter ? '' : 'px'}}</span></span></div>
-              <div class="source__cell"><span v-on="click: sizeClick(this), mousedown: sizeDrag(this, $event)" title="Background size (click to toggle or drag)" class="part -size">{{size == 'auto' ? 'auto' : size + '%'}}</span></div>
-              <div class="source__cell -hide"><span v-on="click: hide($index)" v-show="items.length &gt; 1" title="Hide background" class="part -hide"><i class="fa fa-eye-slash"></i></span></div>
             </div>
           </div>
         </div>
       </template>
     </div>
-    <div class="drag-overlay"></div>
     <div class="container">
-      <div class="container__header">
-        <div class="header">
-          <div class="header__inner">
-            <div class="header__logo"></div>
-            <h1>Filter Blend</h1>
-            <h3>CSS blend modes and filters playground</h3>
-          </div>
-        </div>
-      </div>
-      <div class="container__app">
+      <div id="app" class="container__app">
         <div class="container__main">
           <div class="container__main-inner">
-            <filterblend-sources v-ref="sources" str="{{@ backgroundStr}}"></filterblend-sources>
+            <div class="header">
+              <div class="header__inner">
+                <div class="header__logo"></div>
+                <h1>Filter Blend</h1>
+                <h3>CSS blend modes and filters playground</h3>
+              </div>
+            </div>
             <div class="preview">
-              <div class="preview__inner sec">
-                <filterblend-picker v-ref="picker" color="{{@ color}}"></filterblend-picker>
-                <div style="{{previewStyle}} background-color: {{color}};" v-on="mousedown: $.sources.positionDrag, click: $.sources.switchSelected, mousewheel: $.sources.sizeMouseWheel($event)" class="preview__screen"></div>
+              <div class="hint">
+                <div class="hint__body sec -dimm -spacing-small js-hint">
+                  <div class="sec__heading">
+                    <div class="sec__label">How to use</div>
+                    <div class="sec__btn">ok, got it</div>
+                  </div>
+                  <div class="sec__inner">
+                    <ul>
+                      <li><i class="fa fa-hand-rock-o"></i><span>Drag preview area to change position.</span></li>
+                      <li><i class="fa fa-sort"></i><span>Use mouse wheel to change size.</span></li>
+                      <li> <i class="fa fa-crosshairs"></i><span>Click to switch current background layer.</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="preview__inner">
+                <div v-bind:style="previewStyle" class="preview__screen"></div>
               </div>
             </div>
           </div>
@@ -106,24 +140,28 @@
         <div class="container__options">
           <div class="options nano">
             <div class="options__inner nano-content">
-              <div class="options__section sec -blend">
-                <filterblend-blend v-ref="blend" str="{{@ blendStr}}"></filterblend-blend>
+              <div class="options__section sec">
+                <sources v-ref:sources="v-ref:sources" :str.sync="backgroundStr"></sources>
               </div>
-              <div class="options__section sec -filters">
-                <filterblend-filters v-ref="filters" str="{{@ filtersStr}}"></filterblend-filters>
+              <div class="options__section sec">
+                <picker :color.sync="color"></picker>
               </div>
-              <div class="options__section sec -manual">
+              <div class="options__section sec">
+                <blend :str.sync="blendStr"></blend>
+              </div>
+              <div class="options__section sec">
+                <filters :str.sync="filterStr"></filters>
+              </div>
+              <div class="options__section sec -spacing-small">
+                <output :str="outputStr"></output>
+              </div>
+              <div class="options__section sec -dimm -spacing-small">
                 <div class="sec__heading">
-                  <div class="sec__label">How to use</div>
+                  <div class="sec__label">About this project</div>
                 </div>
-                <div class="howto">
-                  <ul>
-                    <li>Just paste image URL you want to preview, or pick your local image by clicking <i class='fa fa-file-image-o'></i></li>
-                    <li>Click on position control to set value to 'center'. Click on size control to set it to 'auto'.</li>
-                    <li>Drag preview area to change image position or use mouse wheel to change image size. </li>
-                    <li>Switch current image by click on the preview area.</li>
-                    <li>To change background color use color picker in the top right corner of the preview area.</li>
-                  </ul>
+                <div class="sec__inner">
+                  <p>FilterBlend is a playground for the new CSS <code>background-blend-mode</code> and <code>filter</code> properties.</p>
+                  <p>You can find this project on <a href='https://github.com/ilyashubin/FilterBlend' target='_blank'>Github</a> or <a href='https://twitter.com/intent/tweet?text=Handy CSS blend modes and filters playground.&url=http://ilyashubin.github.io/FilterBlend/' class='share'>Tweet</a> about it.</p>
                 </div>
               </div>
             </div>
