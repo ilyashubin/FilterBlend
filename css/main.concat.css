@@ -275,6 +275,10 @@ pre[class*="language-"] {
   -webkit-transition: 0.15s;
           transition: 0.15s;
   margin-right: 5px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .sec__btn:hover {
   color: #81ba8a;
@@ -584,7 +588,7 @@ html {
   font: 14px/1.4 'Helvetica', Arial, sans-serif;
 }
 body {
-  background: #ebebeb;
+  background: #eee;
 }
 a {
   text-decoration: none;
