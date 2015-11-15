@@ -12,8 +12,7 @@ let data = {
       value: {
         current: 2,
         measure: '',
-        pace: 0.5,
-        step: 0.1,
+        step: 0.05,
         min: 0,
         max: 100,
       },
@@ -46,7 +45,7 @@ let data = {
       value: {
         current: 1.5,
         measure: '',
-        step: 0.01,
+        step: 0.03,
         min: 0,
         max: 10,
       },
@@ -57,7 +56,7 @@ let data = {
       value: {
         current: 1.5,
         measure: '',
-        step: 0.1,
+        step: 0.03,
         min: 0,
         max: 10,
       },
@@ -101,7 +100,7 @@ let data = {
       value: {
         current: 5.0,
         measure: 'px',
-        step: 0.5,
+        step: 0.1,
         min: 0,
         max: 100,
       },
