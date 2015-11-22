@@ -15,24 +15,28 @@ mixin templates()
     template#picker
       .picker
         .picker__body
-          label.picker__current(
+          label.picker__current.transp(
             for='pick'
             title='choose background color'
-            v-bind:style='{ "background": color == "transparent" ? "" : color }'
           )
+            .picker__current-inner(
+              v-bind:style='{ "background": color }'
+            )
           .picker__input
             input.inp-text(
               type='text'
               v-model='color'
             )
-            label.picker__call.fa.fa-eyedropper
+            label.picker__call.fa.fa-eyedropper(
+              title='open color picker'
+            )
               input.inp-color(
                 id='pick'
                 type='color'
                 v-model='color'
               )
           .picker__variants
-            .picker__variants-item(
+            .picker__variants-item.transp(
               v-for='preset in presets'
               v-bind:style='{ "background": preset == "transparent" ? "" : preset }'
               @click='color = preset'

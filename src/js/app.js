@@ -48,7 +48,7 @@ let main = new Vue({
 
       let method = methodsMap[e.type];
 
-      method &&  this.$refs.sources[method].apply(this, arguments);
+      method && this.$refs.sources[method].apply(this, arguments);
     }
   },
 
