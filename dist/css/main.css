@@ -159,6 +159,7 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  display: none;
 }
 .github-badge a {
   display: block;
@@ -172,6 +173,11 @@
 }
 .github-badge img {
   max-height: 135px;
+}
+@media only screen and (min-width: 1380px) {
+  .github-badge {
+    display: block;
+  }
 }
 .transp {
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX////f398AAADoq0bgAAAAAWJLR0QCZgt8ZAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABlJREFUGNNjYGAIDYVgyhjUMYWBcgOo6x4A6nkqgREgVhUAAAAASUVORK5CYII=");

@@ -118,6 +118,7 @@
   position relative
   z-index 10
   user-select none
+  display none
   a
     display block
     clip-path polygon(100% 0, 0 0, 100% 100%)
@@ -126,6 +127,9 @@
       opacity .8
   img
     max-height 135px
+
+  +above(1380px)
+    display block
 
 .transp
   background url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACVBMVEX////f398AAADoq0bgAAAAAWJLR0QCZgt8ZAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABlJREFUGNNjYGAIDYVgyhjUMYWBcgOo6x4A6nkqgREgVhUAAAAASUVORK5CYII=')
