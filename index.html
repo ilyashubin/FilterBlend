@@ -27,15 +27,17 @@
       <template id="picker">
         <div class="picker">
           <div class="picker__body">
-            <label for="pick" title="choose background color" v-bind:style="{ &quot;background&quot;: color == &quot;transparent&quot; ? &quot;&quot; : color }" class="picker__current"></label>
+            <label for="pick" title="choose background color" class="picker__current transp">
+              <div v-bind:style="{ &quot;background&quot;: color }" class="picker__current-inner"></div>
+            </label>
             <div class="picker__input">
               <input type="text" v-model="color" class="inp-text"/>
-              <label class="picker__call fa fa-eyedropper">
+              <label title="open color picker" class="picker__call fa fa-eyedropper">
                 <input id="pick" type="color" v-model="color" class="inp-color"/>
               </label>
             </div>
             <div class="picker__variants">
-              <div v-for="preset in presets" v-bind:style="{ &quot;background&quot;: preset == &quot;transparent&quot; ? &quot;&quot; : preset }" @click="color = preset" class="picker__variants-item"></div>
+              <div v-for="preset in presets" v-bind:style="{ &quot;background&quot;: preset == &quot;transparent&quot; ? &quot;&quot; : preset }" @click="color = preset" class="picker__variants-item transp"></div>
             </div>
           </div>
         </div>
